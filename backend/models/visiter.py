@@ -88,4 +88,22 @@ class VisiterModel:
         cursor.close()
         return result
     
+    def complex2(self, date_start, date_end):
+        cursor = self.db.get_cursor()
+        query = """
+            SELECT 
+                s.n_site,
+                s.nom AS nom_site,
+                COUNT(DISTINCT vi.n_visiteur) AS effectif,
+                SUM(vi.nbjours * s.tarif_journalier) AS montant
+            FROM visiter vi
+            JOIN site s
+                ON vi.n_site = s.n_site
+            WHERE vi.date_visite BETWEEN %s AND %s
+            GROUP BY s.n_site, s.nom;
+        """
+        cursor.execute(query, (date_start, date_end))
+        result = cursor.fetchall()
+        cursor.close()
+        return result 
     
