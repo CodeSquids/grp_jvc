@@ -1,0 +1,45 @@
+# ========== JAVA / ECLIPSE ==========
+*.class
+*.jar
+*.war
+*.ear
+.classpath
+.project
+.settings/
+.metadata/
+bin/
+target/
+*.launch
+.idea/
+*.iml
+
+# ========== PYTHON ==========
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+.venv
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+*.pid
+
+# ========== WINDOWS ==========
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ========== TEMPORAIRES ==========
+*.tmp
+*.bak
+*.swp
+*~
+*.DS_Store
+
+# ========== FICHIERS SENSIBLES ==========
+config.local.*
+.secret
