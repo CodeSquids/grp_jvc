@@ -66,44 +66,52 @@ class VisiterModel:
 
     def complex1(self, site_nom, date_start, date_end):
         cursor = self.db.get_cursor()
-        query = """
-            SELECT 
-                v.n_visiteur,
-                v.nom,
-                v.adresse,
-                s.nom AS nom_site,
-                vi.date_visite,
-                vi.nbjours,
-                vi.nbjours * s.tarif_journalier AS montant
-            FROM visiter vi
-            JOIN visiteur v 
-                ON vi.n_visiteur = v.n_visiteur
-            JOIN site s 
-                ON vi.n_site = s.n_site
-            WHERE vi.date_visite BETWEEN %s AND %s
-            AND s.nom = %s
-        """
-        cursor.execute(query, (date_start, date_end, site_nom))
-        result = cursor.fetchall()
-        cursor.close()
-        return result
+        try:
+            query = """
+                SELECT 
+                    v.n_visiteur,
+                    v.nom,
+                    v.adresse,
+                    s.nom AS nom_site,
+                    vi.date_visite,
+                    vi.nbjours,
+                    vi.nbjours * s.tarif_journalier AS montant
+                FROM visiter vi
+                JOIN visiteur v 
+                    ON vi.n_visiteur = v.n_visiteur
+                JOIN site s 
+                    ON vi.n_site = s.n_site
+                WHERE vi.date_visite BETWEEN %s AND %s
+                AND s.nom = %s
+            """
+            cursor.execute(query, (date_start, date_end, site_nom))
+            result = cursor.fetchall()
+            return result
+        except Exception as e:
+            return {'success': False, 'message': str(e)}
+        finally:
+            cursor.close()
     
     def complex2(self, date_start, date_end):
         cursor = self.db.get_cursor()
-        query = """
-            SELECT 
-                s.n_site,
-                s.nom AS nom_site,
-                COUNT(DISTINCT vi.n_visiteur) AS effectif,
-                SUM(vi.nbjours * s.tarif_journalier) AS montant
-            FROM visiter vi
-            JOIN site s
-                ON vi.n_site = s.n_site
-            WHERE vi.date_visite BETWEEN %s AND %s
-            GROUP BY s.n_site, s.nom;
-        """
-        cursor.execute(query, (date_start, date_end))
-        result = cursor.fetchall()
-        cursor.close()
-        return result 
+        try:
+            query = """
+                SELECT 
+                    s.n_site,
+                    s.nom AS nom_site,
+                    COUNT(DISTINCT vi.n_visiteur) AS effectif,
+                    SUM(vi.nbjours * s.tarif_journalier) AS montant
+                FROM visiter vi
+                JOIN site s
+                    ON vi.n_site = s.n_site
+                WHERE vi.date_visite BETWEEN %s AND %s
+                GROUP BY s.n_site, s.nom;
+            """
+            cursor.execute(query, (date_start, date_end))
+            result = cursor.fetchall()
+            return result
+        except Exception as e:
+            return {'success': False, 'message': str(e)}
+        finally:
+            cursor.close() 
     
