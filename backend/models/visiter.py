@@ -56,4 +56,36 @@ class VisiterModel:
         finally:
             cursor.close()
     
+    def get_by_id(self, n_visiter):
+        cursor = self.db.get_cursor()
+        cursor.execute("SELECT * FROM Visiter WHERE n_visiter = %s", (n_visiter,))
+        result = cursor.fetchone()
+        cursor.close()
+        return result
+
+
+    def complex1(self, site_nom, date_start, date_end):
+        cursor = self.db.get_cursor()
+        query = """
+            SELECT 
+                v.n_visiteur,
+                v.nom,
+                v.adresse,
+                s.nom AS nom_site,
+                vi.date_visite,
+                vi.nbjours,
+                vi.nbjours * s.tarif_journalier AS montant
+            FROM visiter vi
+            JOIN visiteur v 
+                ON vi.n_visiteur = v.n_visiteur
+            JOIN site s 
+                ON vi.n_site = s.n_site
+            WHERE vi.date_visite BETWEEN %s AND %s
+            AND s.nom = %s
+        """
+        cursor.execute(query, (date_start, date_end, site_nom))
+        result = cursor.fetchall()
+        cursor.close()
+        return result
+    
     
