@@ -17,12 +17,20 @@ public class Main extends JFrame {
     private JProgressBar progressBar;
     private JLabel lblRecordCount;
     
-    private static final Color COLOR_PRIMARY = new Color(41, 128, 185);
-    private static final Color COLOR_SUCCESS = new Color(39, 174, 96);
-    private static final Color COLOR_DANGER = new Color(231, 76, 60);
-    private static final Color COLOR_WARNING = new Color(241, 196, 15);
-    private static final Color COLOR_BACKGROUND = new Color(236, 240, 241);
-    private static final Color COLOR_HEADER = new Color(52, 73, 94);
+    // Palette couleurs élégantes et sophistiquées
+    private static final Color COLOR_BACKGROUND = new Color(250, 248, 245);  // Beige clair élégant
+    private static final Color COLOR_PANEL = new Color(255, 255, 255);       // Blanc pur
+    private static final Color COLOR_BORDER = new Color(210, 200, 190);       // Beige grisé
+    private static final Color COLOR_HEADER_BG = new Color(45, 40, 55);       // Gris profond élégant
+    private static final Color COLOR_ACCENT = new Color(160, 130, 110);       // Brun élégant
+    private static final Color COLOR_BUTTON_ADD = new Color(200, 230, 210);   // Vert sauge clair
+    private static final Color COLOR_BUTTON_EDIT = new Color(210, 195, 220);  // Violet doux clair
+    private static final Color COLOR_BUTTON_DELETE = new Color(230, 195, 195);// Rouge terreux clair
+    private static final Color COLOR_BUTTON_REFRESH = new Color(200, 210, 220);// Gris bleuté clair
+    private static final Color COLOR_BUTTON_EXPORT = new Color(230, 210, 180); // Or cuivré clair
+    private static final Color COLOR_TABLE_HEADER = new Color(55, 50, 65);    // Header tableau
+    private static final Color COLOR_ROW_ODD = new Color(255, 255, 255);      // Lignes impaires
+    private static final Color COLOR_ROW_EVEN = new Color(248, 245, 242);     // Lignes paires
     
     public Main() {
         setTitle("Gestion des Visiteurs - Système de Gestion des Sites Touristiques");
@@ -30,16 +38,16 @@ public class Main extends JFrame {
         setSize(1100, 700);
         setLocationRelativeTo(null);
         
-        // Panel principal avec BorderLayout
+        // Panel principal
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.setBackground(COLOR_BACKGROUND);
         
-        // Header (HAUT)
+        // Header
         JPanel headerPanel = createHeaderPanel();
         mainPanel.add(headerPanel, BorderLayout.NORTH);
         
-        // Panel central qui contient recherche + tableau + boutons
+        // Panel central
         JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
         centerPanel.setOpaque(false);
         
@@ -53,7 +61,7 @@ public class Main extends JFrame {
         
         mainPanel.add(centerPanel, BorderLayout.CENTER);
         
-        // Status bar (BAS)
+        // Status bar
         JPanel statusPanel = createStatusPanel();
         mainPanel.add(statusPanel, BorderLayout.SOUTH);
         
@@ -66,8 +74,8 @@ public class Main extends JFrame {
     
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(COLOR_HEADER);
-        header.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        header.setBackground(COLOR_HEADER_BG);
+        header.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
         
         JLabel titleLabel = new JLabel("GESTION DES VISITEURS");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
@@ -75,16 +83,16 @@ public class Main extends JFrame {
         
         JLabel subtitleLabel = new JLabel("Système de gestion des sites touristiques");
         subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        subtitleLabel.setForeground(new Color(189, 195, 199));
+        subtitleLabel.setForeground(new Color(200, 195, 190));
         
         JPanel textPanel = new JPanel(new GridLayout(2, 1));
         textPanel.setOpaque(false);
         textPanel.add(titleLabel);
         textPanel.add(subtitleLabel);
         
-        JLabel logoLabel = new JLabel("🏛️");
-        logoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 48));
-        logoLabel.setForeground(Color.WHITE);
+        JLabel logoLabel = new JLabel("✦");
+        logoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 40));
+        logoLabel.setForeground(new Color(200, 180, 150));
         
         header.add(logoLabel, BorderLayout.WEST);
         header.add(textPanel, BorderLayout.CENTER);
@@ -94,42 +102,49 @@ public class Main extends JFrame {
     
     private JPanel createSearchPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(COLOR_PANEL);
         panel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 200, 200)),
-            BorderFactory.createEmptyBorder(15, 15, 15, 15)
+            BorderFactory.createLineBorder(COLOR_BORDER, 1),
+            BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
         
         JLabel titleLabel = new JLabel("Recherche avancée");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        titleLabel.setForeground(COLOR_PRIMARY);
+        titleLabel.setForeground(COLOR_ACCENT);
         
         JPanel searchControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         searchControls.setOpaque(false);
         
-        Font labelFont = new Font("Segoe UI", Font.PLAIN, 12);
-        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 12);
+        Font labelFont = new Font("Segoe UI", Font.PLAIN, 13);
+        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 13);
         
         JLabel lblSearchBy = new JLabel("Rechercher par :");
         lblSearchBy.setFont(labelFont);
+        lblSearchBy.setForeground(Color.BLACK);
         
         cmbSearchType = new JComboBox<>(new String[]{"📋 Numéro", "👤 Nom"});
         cmbSearchType.setFont(fieldFont);
+        cmbSearchType.setBackground(COLOR_PANEL);
+        cmbSearchType.setForeground(Color.BLACK);
+        cmbSearchType.setBorder(BorderFactory.createLineBorder(COLOR_BORDER));
         
         JLabel lblValue = new JLabel("Valeur :");
         lblValue.setFont(labelFont);
+        lblValue.setForeground(Color.BLACK);
         
         txtSearch = new JTextField(25);
         txtSearch.setFont(fieldFont);
+        txtSearch.setForeground(Color.BLACK);
+        txtSearch.setBackground(COLOR_PANEL);
         txtSearch.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 200, 200)),
-            BorderFactory.createEmptyBorder(8, 10, 8, 10)
+            BorderFactory.createLineBorder(COLOR_BORDER, 1),
+            BorderFactory.createEmptyBorder(8, 12, 8, 12)
         ));
         
-        JButton btnSearch = createStyledButton("🔍 Rechercher", COLOR_PRIMARY);
+        JButton btnSearch = createElegantButton("🔍 Rechercher", COLOR_ACCENT);
         btnSearch.addActionListener(e -> searchVisiteur());
         
-        JButton btnReset = createStyledButton("🔄 Réinitialiser", COLOR_WARNING);
+        JButton btnReset = createElegantButton("🔄 Réinitialiser", new Color(200, 195, 190));
         btnReset.addActionListener(e -> {
             txtSearch.setText("");
             loadVisiteurs();
@@ -150,10 +165,10 @@ public class Main extends JFrame {
     
     private JPanel createTableContainer() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(COLOR_PANEL);
         panel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 200, 200)),
-            BorderFactory.createEmptyBorder(15, 15, 15, 15)
+            BorderFactory.createLineBorder(COLOR_BORDER, 1),
+            BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
         
         // Titre avec compteur
@@ -162,11 +177,11 @@ public class Main extends JFrame {
         
         JLabel titleLabel = new JLabel("Liste des visiteurs");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        titleLabel.setForeground(COLOR_PRIMARY);
+        titleLabel.setForeground(COLOR_ACCENT);
         
         lblRecordCount = new JLabel("0 enregistrement(s)");
-        lblRecordCount.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        lblRecordCount.setForeground(Color.GRAY);
+        lblRecordCount.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblRecordCount.setForeground(Color.DARK_GRAY);
         
         titlePanel.add(titleLabel, BorderLayout.WEST);
         titlePanel.add(lblRecordCount, BorderLayout.EAST);
@@ -175,17 +190,19 @@ public class Main extends JFrame {
         tableModel = new VisiteurTableModel();
         table = new JTable(tableModel);
         table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        table.setRowHeight(30);
+        table.setRowHeight(32);
         table.setIntercellSpacing(new Dimension(10, 5));
         table.setShowGrid(false);
-        table.setSelectionBackground(new Color(41, 128, 185, 50));
+        table.setBackground(COLOR_PANEL);
+        table.setForeground(Color.BLACK);
+        table.setSelectionBackground(new Color(160, 130, 110, 40));
         table.setSelectionForeground(Color.BLACK);
         
         JTableHeader header = table.getTableHeader();
         header.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        header.setBackground(COLOR_HEADER);
+        header.setBackground(COLOR_TABLE_HEADER);
         header.setForeground(Color.WHITE);
-        header.setPreferredSize(new Dimension(header.getWidth(), 35));
+        header.setPreferredSize(new Dimension(header.getWidth(), 38));
         
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
@@ -193,15 +210,17 @@ public class Main extends JFrame {
                     boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 if (!isSelected) {
-                    c.setBackground(row % 2 == 0 ? Color.WHITE : new Color(248, 249, 250));
+                    c.setBackground(row % 2 == 0 ? COLOR_ROW_ODD : COLOR_ROW_EVEN);
+                    c.setForeground(Color.BLACK);
                 }
-                setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+                setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 12));
                 return c;
             }
         });
         
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+        scrollPane.setBorder(BorderFactory.createLineBorder(COLOR_BORDER, 1));
+        scrollPane.getViewport().setBackground(COLOR_PANEL);
         
         // Boutons d'action
         JPanel buttonPanel = createActionButtonPanel();
@@ -214,28 +233,27 @@ public class Main extends JFrame {
     }
     
     private JPanel createActionButtonPanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 15));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         
-        // Boutons avec textes plus visibles et impactants
-        JButton btnAdd = createStyledButton("AJOUTER UN VISITEUR", COLOR_SUCCESS);
+        JButton btnAdd = createElegantButton("AJOUTER UN VISITEUR", COLOR_BUTTON_ADD);
         btnAdd.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnAdd.addActionListener(e -> addVisiteur());
         
-        JButton btnEdit = createStyledButton("MODIFIER", COLOR_PRIMARY);
+        JButton btnEdit = createElegantButton("MODIFIER", COLOR_BUTTON_EDIT);
         btnEdit.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnEdit.addActionListener(e -> editVisiteur());
         
-        JButton btnDelete = createStyledButton("SUPPRIMER", COLOR_DANGER);
+        JButton btnDelete = createElegantButton("SUPPRIMER", COLOR_BUTTON_DELETE);
         btnDelete.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnDelete.addActionListener(e -> deleteVisiteur());
         
-        JButton btnRefresh = createStyledButton("ACTUALISER", COLOR_HEADER);
+        JButton btnRefresh = createElegantButton("ACTUALISER", COLOR_BUTTON_REFRESH);
         btnRefresh.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnRefresh.addActionListener(e -> loadVisiteurs());
         
-        JButton btnExport = createStyledButton("EXPORTER", new Color(155, 89, 182));
+        JButton btnExport = createElegantButton("EXPORTER", COLOR_BUTTON_EXPORT);
         btnExport.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnExport.addActionListener(e -> exportToExcel());
         
@@ -250,16 +268,18 @@ public class Main extends JFrame {
     
     private JPanel createStatusPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(COLOR_HEADER);
-        panel.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        panel.setBackground(COLOR_HEADER_BG);
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         
         lblStatus = new JLabel("✅ Système prêt");
-        lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         lblStatus.setForeground(Color.WHITE);
         
         progressBar = new JProgressBar();
         progressBar.setVisible(false);
-        progressBar.setPreferredSize(new Dimension(150, 15));
+        progressBar.setPreferredSize(new Dimension(150, 12));
+        progressBar.setBackground(new Color(80, 75, 85));
+        progressBar.setForeground(COLOR_ACCENT);
         
         panel.add(lblStatus, BorderLayout.WEST);
         panel.add(progressBar, BorderLayout.EAST);
@@ -267,21 +287,34 @@ public class Main extends JFrame {
         return panel;
     }
     
-    private JButton createStyledButton(String text, Color backgroundColor) {
+    private JButton createElegantButton(String text, Color backgroundColor) {
         JButton button = new JButton(text);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        button.setForeground(Color.BLACK);  // Texte en NOIR
         button.setBackground(backgroundColor);
-        button.setBorder(BorderFactory.createEmptyBorder(8, 18, 8, 18));
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        // Bordure élégante avec contour foncé pour meilleur contraste
+        button.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(COLOR_BORDER, 1),
+            BorderFactory.createEmptyBorder(9, 21, 9, 21)
+        ));
         
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(backgroundColor.darker());
+                button.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(COLOR_BORDER.darker(), 1),
+                    BorderFactory.createEmptyBorder(9, 21, 9, 21)
+                ));
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(backgroundColor);
+                button.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(COLOR_BORDER, 1),
+                    BorderFactory.createEmptyBorder(9, 21, 9, 21)
+                ));
             }
         });
         
@@ -310,15 +343,15 @@ public class Main extends JFrame {
     
     private void updateStatus(String message, String type) {
         String icon = switch (type) {
-            case "success" -> "✅ ";
-            case "error" -> "❌ ";
-            case "warning" -> "⚠️ ";
-            default -> "ℹ️ ";
+            case "success" -> "✓ ";
+            case "error" -> "✗ ";
+            case "warning" -> "⚠ ";
+            default -> "ℹ ";
         };
         lblStatus.setText(icon + message);
         
         if (!type.equals("error")) {
-            Timer timer = new Timer(3000, e -> lblStatus.setText("✅ Système prêt"));
+            Timer timer = new Timer(3000, e -> lblStatus.setText("✓ Système prêt"));
             timer.setRepeats(false);
             timer.start();
         }
