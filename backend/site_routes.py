@@ -38,7 +38,6 @@ def update_site(n_site):
     data = request.json
     result = site_model.update(
         n_site,
-        data.get('n_site'),
         data.get('nom'),
         data.get('lieu'),
         data.get('tarif_journalier')

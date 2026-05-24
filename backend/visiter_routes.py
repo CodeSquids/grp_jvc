@@ -12,7 +12,7 @@ def get_visiter():
 
 @visiter_bp.route('/api/visiter/<n_visiter>', methods=['GET'])
 def get_visiter_by_id(n_visiter):
-    """Récupère un visiter par son numéro"""
+    """Récupère un visiter """
     visiter = visiter_model.get_by_id(n_visiter)
     if visiter:
         return jsonify(visiter)
@@ -39,7 +39,6 @@ def update_visiter(n_visiter):
     data = request.json
     result = visiter_model.update(
         n_visiter,
-        data.get('n_visiteur'),
         data.get('n_site'),
         data.get('nbjours'),
         data.get('date_visite')
@@ -59,9 +58,10 @@ def delete_visiter(n_visiter):
 @visiter_bp.route('/api/visiter/complex1', methods=['GET'])
 def complex1():
     """Requête complexe 1"""
-    site_nom = request.args.get('site_nom')
-    date_start = request.args.get('date_start')
-    date_end = request.args.get('date_end')
+    data = request.json
+    site_nom = data.get('site_nom')
+    date_start = data.get('date_start')
+    date_end = data.get('date_end')
     
     if not site_nom or not date_start or not date_end:
         return jsonify({'error': 'site_nom, date_start et date_end requis'}), 400
@@ -72,8 +72,9 @@ def complex1():
 @visiter_bp.route('/api/visiter/complex2', methods=['GET'])
 def complex2():
     """Requête complexe 2"""
-    date_start = request.args.get('date_start')
-    date_end = request.args.get('date_end')
+    data = request.json
+    date_start = data.get('date_start')
+    date_end = data.get('date_end')
     
     if not date_start or not date_end:
         return jsonify({'error': 'date_start et date_end requis'}), 400
