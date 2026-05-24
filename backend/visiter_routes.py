@@ -39,6 +39,7 @@ def update_visiter(n_visiter):
     data = request.json
     result = visiter_model.update(
         n_visiter,
+        data.get('n_visiteur'),
         data.get('n_site'),
         data.get('nbjours'),
         data.get('date_visite')
