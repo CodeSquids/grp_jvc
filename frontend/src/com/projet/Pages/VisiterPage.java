@@ -1,23 +1,22 @@
 package com.projet.Pages;
 
-import com.projet.Dialog.SiteCRUDDialog;
+import com.projet.Dialog.VisiterCRUDDialog;
 import com.projet.Main;
-import com.projet.Services.SiteService;
-import com.projet.Tables.SiteTableModel;
+import com.projet.Services.VisiterService;
+import com.projet.Tables.VisiterTableModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-public class SitePage extends JFrame {
+public class VisiterPage extends JFrame {
     private JTable table;
-    private SiteTableModel tableModel;
+    private VisiterTableModel tableModel;
     private JTextField txtSearch;
     private JLabel lblStatus;
     private JProgressBar progressBar;
@@ -32,13 +31,12 @@ public class SitePage extends JFrame {
     private static final Color COLOR_BUTTON_EDIT = new Color(210, 195, 220);
     private static final Color COLOR_BUTTON_DELETE = new Color(230, 195, 195);
     private static final Color COLOR_BUTTON_REFRESH = new Color(200, 210, 220);
-    private static final Color COLOR_BUTTON_EXPORT = new Color(230, 210, 180);
     private static final Color COLOR_TABLE_HEADER = new Color(55, 50, 65);
     private static final Color COLOR_ROW_ODD = new Color(255, 255, 255);
     private static final Color COLOR_ROW_EVEN = new Color(248, 245, 242);
 
-    public SitePage() {
-        setTitle("Gestion des Sites - Système de Gestion des Sites Touristiques");
+    public VisiterPage() {
+        setTitle("Gestion des Visites - Systeme de Gestion des Sites Touristiques");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1100, 700);
         setLocationRelativeTo(null);
@@ -56,12 +54,11 @@ public class SitePage extends JFrame {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         mainPanel.add(createStatusPanel(), BorderLayout.SOUTH);
-
         add(mainPanel);
 
         setupKeyboardShortcuts();
-        loadSites();
-        updateStatus("Système prêt", "success");
+        loadVisiter();
+        updateStatus("Systeme pret", "success");
     }
 
     private JPanel createHeaderPanel() {
@@ -69,11 +66,11 @@ public class SitePage extends JFrame {
         header.setBackground(COLOR_HEADER_BG);
         header.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
 
-        JLabel titleLabel = new JLabel("GESTION DES SITES");
+        JLabel titleLabel = new JLabel("GESTION DES VISITES");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
 
-        JLabel subtitleLabel = new JLabel("Système de gestion des sites touristiques");
+        JLabel subtitleLabel = new JLabel("Systeme de gestion des visites touristiques");
         subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         subtitleLabel.setForeground(new Color(200, 195, 190));
 
@@ -100,14 +97,14 @@ public class SitePage extends JFrame {
                 BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
 
-        JLabel titleLabel = new JLabel("Recherche par numéro de site");
+        JLabel titleLabel = new JLabel("Recherche par numero de visite");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         titleLabel.setForeground(COLOR_ACCENT);
 
         JPanel searchControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         searchControls.setOpaque(false);
 
-        JLabel lblValue = new JLabel("N° Site :");
+        JLabel lblValue = new JLabel("N Visiter :");
         lblValue.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         lblValue.setForeground(Color.BLACK);
 
@@ -121,12 +118,12 @@ public class SitePage extends JFrame {
         ));
 
         JButton btnSearch = createElegantButton("Rechercher", COLOR_ACCENT);
-        btnSearch.addActionListener(e -> searchSite());
+        btnSearch.addActionListener(e -> searchVisiter());
 
-        JButton btnReset = createElegantButton("Réinitialiser", new Color(200, 195, 190));
+        JButton btnReset = createElegantButton("Reinitialiser", new Color(200, 195, 190));
         btnReset.addActionListener(e -> {
             txtSearch.setText("");
-            loadSites();
+            loadVisiter();
         });
 
         searchControls.add(lblValue);
@@ -151,7 +148,7 @@ public class SitePage extends JFrame {
         JPanel titlePanel = new JPanel(new BorderLayout());
         titlePanel.setOpaque(false);
 
-        JLabel titleLabel = new JLabel("Liste des sites");
+        JLabel titleLabel = new JLabel("Liste des visites");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         titleLabel.setForeground(COLOR_ACCENT);
 
@@ -162,7 +159,7 @@ public class SitePage extends JFrame {
         titlePanel.add(titleLabel, BorderLayout.WEST);
         titlePanel.add(lblRecordCount, BorderLayout.EAST);
 
-        tableModel = new SiteTableModel();
+        tableModel = new VisiterTableModel();
         table = new JTable(tableModel);
         table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         table.setRowHeight(32);
@@ -209,36 +206,36 @@ public class SitePage extends JFrame {
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
-        JButton btnAdd = createElegantButton("AJOUTER UN SITE", COLOR_BUTTON_ADD);
+        JButton btnAdd = createElegantButton("AJOUTER UNE VISITE", COLOR_BUTTON_ADD);
         btnAdd.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnAdd.addActionListener(e -> addSite());
+        btnAdd.addActionListener(e -> addVisiter());
 
         JButton btnEdit = createElegantButton("MODIFIER", COLOR_BUTTON_EDIT);
         btnEdit.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnEdit.addActionListener(e -> editSite());
+        btnEdit.addActionListener(e -> editVisiter());
 
         JButton btnDelete = createElegantButton("SUPPRIMER", COLOR_BUTTON_DELETE);
         btnDelete.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnDelete.addActionListener(e -> deleteSite());
+        btnDelete.addActionListener(e -> deleteVisiter());
 
         JButton btnRefresh = createElegantButton("ACTUALISER", COLOR_BUTTON_REFRESH);
         btnRefresh.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnRefresh.addActionListener(e -> loadSites());
+        btnRefresh.addActionListener(e -> loadVisiter());
 
         JButton btnVisitors = createElegantButton("CRUD VISITEURS", COLOR_BUTTON_REFRESH);
         btnVisitors.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnVisitors.addActionListener(e -> openVisitorPage());
 
-        JButton btnVisiter = createElegantButton("CRUD VISITES", COLOR_BUTTON_REFRESH);
-        btnVisiter.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnVisiter.addActionListener(e -> openVisiterPage());
+        JButton btnSites = createElegantButton("CRUD SITES", COLOR_BUTTON_REFRESH);
+        btnSites.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        btnSites.addActionListener(e -> openSitePage());
 
         panel.add(btnAdd);
         panel.add(btnEdit);
         panel.add(btnDelete);
         panel.add(btnRefresh);
         panel.add(btnVisitors);
-        panel.add(btnVisiter);
+        panel.add(btnSites);
 
         return panel;
     }
@@ -248,7 +245,7 @@ public class SitePage extends JFrame {
         panel.setBackground(COLOR_HEADER_BG);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        lblStatus = new JLabel("Système prêt");
+        lblStatus = new JLabel("Systeme pret");
         lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         lblStatus.setForeground(Color.WHITE);
 
@@ -263,6 +260,7 @@ public class SitePage extends JFrame {
 
         return panel;
     }
+
     private JButton createElegantButton(String text, Color backgroundColor) {
         JButton button = new JButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -281,14 +279,16 @@ public class SitePage extends JFrame {
                 button.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(COLOR_BORDER.darker(), 1),
                         BorderFactory.createEmptyBorder(9, 21, 9, 21)
-                ));            }
+                ));
+            }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(backgroundColor);
                 button.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(COLOR_BORDER, 1),
                         BorderFactory.createEmptyBorder(9, 21, 9, 21)
-                ));            }
+                ));
+            }
         });
 
         return button;
@@ -300,7 +300,7 @@ public class SitePage extends JFrame {
         getRootPane().getActionMap().put("refresh", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loadSites();
+                loadVisiter();
             }
         });
 
@@ -316,39 +316,39 @@ public class SitePage extends JFrame {
 
     private void updateStatus(String message, String type) {
         String icon = switch (type) {
-            case "success" -> "✓ ";
-            case "error" -> "✗ ";
-            case "warning" -> "⚠ ";
-            default -> "ℹ ";
+            case "success" -> "";
+            case "error" -> "Erreur: ";
+            case "warning" -> "Attention: ";
+            default -> "";
         };
         lblStatus.setText(icon + message);
 
         if (!type.equals("error")) {
-            Timer timer = new Timer(3000, e -> lblStatus.setText("✓ Système prêt"));
+            Timer timer = new Timer(3000, e -> lblStatus.setText("Systeme pret"));
             timer.setRepeats(false);
             timer.start();
         }
     }
 
-    private void loadSites() {
+    private void loadVisiter() {
         showProgress(true);
-        SwingWorker<JSONArray, Void> worker = new SwingWorker<JSONArray, Void>() {
+        SwingWorker<JSONArray, Void> worker = new SwingWorker<>() {
             @Override
             protected JSONArray doInBackground() throws Exception {
-                return SiteService.getAllSite();
+                return VisiterService.getAllVisiter();
             }
 
             @Override
             protected void done() {
                 try {
                     JSONArray result = get();
-                    tableModel.setSite(result);
+                    tableModel.setVisiter(result);
                     lblRecordCount.setText(result.length() + " enregistrement(s)");
-                    updateStatus("Données chargées (" + result.length() + " sites)", "success");
+                    updateStatus("Donnees chargees (" + result.length() + " visites)", "success");
                 } catch (Exception e) {
                     updateStatus("Erreur de connexion au serveur", "error");
-                    JOptionPane.showMessageDialog(SitePage.this,
-                            "Impossible de charger les données.\nVérifiez que le serveur backend est démarré sur http://localhost:5000",
+                    JOptionPane.showMessageDialog(VisiterPage.this,
+                            "Impossible de charger les donnees.\nVerifiez que le serveur backend est demarre sur http://localhost:5000",
                             "Erreur de connexion", JOptionPane.ERROR_MESSAGE);
                 } finally {
                     showProgress(false);
@@ -358,30 +358,29 @@ public class SitePage extends JFrame {
         worker.execute();
     }
 
-    private void searchSite() {
+    private void searchVisiter() {
         String value = txtSearch.getText().trim();
-
         if (value.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Veuillez entrer un numéro de site !",
+                    "Veuillez entrer un numero de visite !",
                     "Recherche", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
         showProgress(true);
-        SwingWorker<JSONArray, Void> worker = new SwingWorker<JSONArray, Void>() {
+        SwingWorker<JSONArray, Void> worker = new SwingWorker<>() {
             @Override
             protected JSONArray doInBackground() throws Exception {
-                return SiteService.searchSite(value);
+                return VisiterService.searchVisiter(value);
             }
 
             @Override
             protected void done() {
                 try {
                     JSONArray result = get();
-                    tableModel.setSite(result);
+                    tableModel.setVisiter(result);
                     lblRecordCount.setText(result.length() + " enregistrement(s)");
-                    updateStatus(result.length() == 0 ? "Aucun résultat pour: " + value : "Site trouvé", "success");
+                    updateStatus(result.length() == 0 ? "Aucun resultat pour: " + value : "Visite trouvee", "success");
                 } catch (Exception e) {
                     updateStatus("Erreur de recherche", "error");
                 } finally {
@@ -392,8 +391,8 @@ public class SitePage extends JFrame {
         worker.execute();
     }
 
-    private void addSite() {
-        SiteCRUDDialog dialog = new SiteCRUDDialog(this, "add", null, null, null, null);
+    private void addVisiter() {
+        VisiterCRUDDialog dialog = new VisiterCRUDDialog(this, "add", null, null, null, null, null);
         dialog.setVisible(true);
 
         if (dialog.isSaved()) {
@@ -401,11 +400,12 @@ public class SitePage extends JFrame {
             SwingWorker<Boolean, Void> worker = new SwingWorker<>() {
                 @Override
                 protected Boolean doInBackground() throws Exception {
-                    return SiteService.createSite(
+                    return VisiterService.createVisiter(
                             dialog.getNumero(),
-                            dialog.getNom(),
-                            dialog.getLieu(),
-                            dialog.getTarifJournalier()
+                            dialog.getVisiteur(),
+                            dialog.getSite(),
+                            dialog.getNbJours(),
+                            dialog.getDateVisite()
                     );
                 }
 
@@ -413,8 +413,8 @@ public class SitePage extends JFrame {
                 protected void done() {
                     try {
                         if (get()) {
-                            updateStatus("Site ajouté avec succès !", "success");
-                            loadSites();
+                            updateStatus("Visite ajoutee avec succes !", "success");
+                            loadVisiter();
                             txtSearch.setText("");
                         } else {
                             updateStatus("Erreur lors de l'ajout", "error");
@@ -430,33 +430,35 @@ public class SitePage extends JFrame {
         }
     }
 
-    private void editSite() {
+    private void editVisiter() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this,
-                    "Veuillez sélectionner un site à modifier !",
+                    "Veuillez selectionner une visite a modifier !",
                     "Modification", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        JSONObject site = tableModel.getSiteAt(table.convertRowIndexToModel(selectedRow));
-        SiteCRUDDialog dialog = new SiteCRUDDialog(this, "edit",
-                site.getString("n_site"),
-                site.getString("nom"),
-                site.optString("lieu"),
-                getTarif(site));
+        JSONObject visiter = tableModel.getVisiterAt(table.convertRowIndexToModel(selectedRow));
+        VisiterCRUDDialog dialog = new VisiterCRUDDialog(this, "edit",
+                visiter.optString("n_visiter"),
+                visiter.optString("n_visiteur"),
+                visiter.optString("n_site"),
+                getInteger(visiter, "nbjours"),
+                visiter.optString("date_visite"));
         dialog.setVisible(true);
 
         if (dialog.isSaved()) {
             showProgress(true);
-            SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+            SwingWorker<Boolean, Void> worker = new SwingWorker<>() {
                 @Override
                 protected Boolean doInBackground() throws Exception {
-                    return SiteService.updateSite(
+                    return VisiterService.updateVisiter(
                             dialog.getNumero(),
-                            dialog.getNom(),
-                            dialog.getLieu(),
-                            dialog.getTarifJournalier()
+                            dialog.getVisiteur(),
+                            dialog.getSite(),
+                            dialog.getNbJours(),
+                            dialog.getDateVisite()
                     );
                 }
 
@@ -464,8 +466,8 @@ public class SitePage extends JFrame {
                 protected void done() {
                     try {
                         if (get()) {
-                            updateStatus("Site modifié avec succès !", "success");
-                            loadSites();
+                            updateStatus("Visite modifiee avec succes !", "success");
+                            loadVisiter();
                         } else {
                             updateStatus("Erreur lors de la modification", "error");
                         }
@@ -480,42 +482,43 @@ public class SitePage extends JFrame {
         }
     }
 
-    private void deleteSite() {
+    private void deleteVisiter() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this,
-                    "Veuillez sélectionner un site à supprimer !",
+                    "Veuillez selectionner une visite a supprimer !",
                     "Suppression", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        JSONObject site = tableModel.getSiteAt(table.convertRowIndexToModel(selectedRow));
-        String numero = site.getString("n_site");
-        String nom = site.getString("nom");
+        JSONObject visiter = tableModel.getVisiterAt(table.convertRowIndexToModel(selectedRow));
+        String numero = visiter.optString("n_visiter");
 
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Supprimer le site :\n\nN°: " + numero + "\nNom: " + nom + "\n\nCette action est irréversible !",
-                "Confirmation de suppression",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE);
+        VisiterCRUDDialog dialog = new VisiterCRUDDialog(this, "delete",
+                numero,
+                visiter.optString("n_visiteur"),
+                visiter.optString("n_site"),
+                getInteger(visiter, "nbjours"),
+                visiter.optString("date_visite"));
+        dialog.setVisible(true);
 
-        if (confirm == JOptionPane.YES_OPTION) {
+        if (dialog.isSaved()) {
             showProgress(true);
             SwingWorker<Boolean, Void> worker = new SwingWorker<>() {
                 @Override
                 protected Boolean doInBackground() throws Exception {
-                    return SiteService.deleteSite(numero);
+                    return VisiterService.deleteVisiter(numero);
                 }
 
                 @Override
                 protected void done() {
                     try {
                         if (get()) {
-                            updateStatus("Site supprimé avec succès !", "success");
-                            loadSites();
+                            updateStatus("Visite supprimee avec succes !", "success");
+                            loadVisiter();
                             txtSearch.setText("");
                         } else {
-                            updateStatus("Impossible de supprimer le site", "error");
+                            updateStatus("Impossible de supprimer la visite", "error");
                         }
                     } catch (Exception e) {
                         updateStatus("Erreur: " + e.getMessage(), "error");
@@ -528,14 +531,14 @@ public class SitePage extends JFrame {
         }
     }
 
-    private Float getTarif(JSONObject site) {
-        Object value = site.opt("tarif_journalier");
+    private Integer getInteger(JSONObject object, String key) {
+        Object value = object.opt(key);
         if (value instanceof Number number) {
-            return number.floatValue();
+            return number.intValue();
         }
         if (value != null) {
             try {
-                return Float.parseFloat(value.toString());
+                return Integer.parseInt(value.toString());
             } catch (NumberFormatException ignored) {
                 return null;
             }
@@ -549,9 +552,9 @@ public class SitePage extends JFrame {
         dispose();
     }
 
-    private void openVisiterPage() {
-        VisiterPage visiterPage = new VisiterPage();
-        visiterPage.setVisible(true);
+    private void openSitePage() {
+        SitePage sitePage = new SitePage();
+        sitePage.setVisible(true);
         dispose();
     }
 
@@ -569,6 +572,6 @@ public class SitePage extends JFrame {
             e.printStackTrace();
         }
 
-        SwingUtilities.invokeLater(() -> new SitePage().setVisible(true));
+        SwingUtilities.invokeLater(() -> new VisiterPage().setVisible(true));
     }
 }

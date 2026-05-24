@@ -18,7 +18,7 @@ public class SiteCRUDDialog extends JDialog {
         setLayout(new BorderLayout());
 
         JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(22, 28, 22, 28));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         mainPanel.setBackground(Color.WHITE);
 
         JPanel formPanel = new JPanel(new GridBagLayout());
@@ -42,9 +42,9 @@ public class SiteCRUDDialog extends JDialog {
             txtNumero.setBackground(new Color(240, 240, 240));
         }
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 18, 10));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(22, 0, 0, 0));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
         JButton btnSave = createStyledButton(mode.equals("add") ? "Enregistrer" : "Mettre a jour", COLOR_SUCCESS);
         JButton btnCancel = createStyledButton("Annuler", COLOR_DANGER);
@@ -60,7 +60,7 @@ public class SiteCRUDDialog extends JDialog {
 
         add(mainPanel);
 
-        setSize(620, 380);
+        setSize(500, 380);
         setLocationRelativeTo(parent);
         setResizable(false);
 
@@ -74,15 +74,10 @@ public class SiteCRUDDialog extends JDialog {
     private JTextField createTextField(String value, Font font) {
         JTextField textField = new JTextField(value != null ? value : "");
         textField.setFont(font);
-        textField.setEnabled(true);
-        textField.setEditable(true);
-        textField.setFocusable(true);
         textField.setForeground(Color.BLACK);
         textField.setBackground(Color.WHITE);
         textField.setCaretColor(Color.BLACK);
-        textField.setColumns(26);
-        textField.setPreferredSize(new Dimension(320, 38));
-        textField.setMinimumSize(new Dimension(320, 38));
+        textField.setColumns(20);
         textField.setBorder(createTextFieldBorder());
         return textField;
     }
@@ -91,8 +86,8 @@ public class SiteCRUDDialog extends JDialog {
         GridBagConstraints labelGbc = new GridBagConstraints();
         labelGbc.gridx = 0;
         labelGbc.gridy = row;
-        labelGbc.insets = new Insets(10, 10, 10, 16);
-        labelGbc.anchor = GridBagConstraints.EAST;
+        labelGbc.insets = new Insets(10, 10, 10, 10);
+        labelGbc.fill = GridBagConstraints.HORIZONTAL;
 
         JLabel label = new JLabel(labelText);
         label.setFont(labelFont);
@@ -102,9 +97,8 @@ public class SiteCRUDDialog extends JDialog {
         GridBagConstraints fieldGbc = new GridBagConstraints();
         fieldGbc.gridx = 1;
         fieldGbc.gridy = row;
-        fieldGbc.insets = new Insets(10, 10, 10, 16);
+        fieldGbc.insets = new Insets(10, 10, 10, 10);
         fieldGbc.fill = GridBagConstraints.HORIZONTAL;
-        fieldGbc.weightx = 1.0;
         formPanel.add(textField, fieldGbc);
     }
 
@@ -120,7 +114,7 @@ public class SiteCRUDDialog extends JDialog {
         button.setFont(new Font("Segoe UI", Font.BOLD, 12));
         button.setForeground(Color.BLACK);
         button.setBackground(backgroundColor);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 24, 10, 24));
+        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 

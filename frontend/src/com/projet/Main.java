@@ -6,6 +6,7 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import com.projet.Pages.SitePage;
+import com.projet.Pages.VisiterPage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -263,12 +264,17 @@ public class Main extends JFrame {
         btnToSite.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnToSite.addActionListener(e -> openSitePage());
 
+        JButton btnToVisiter = createElegantButton("CRUD VISITES", COLOR_BUTTON_REFRESH);
+        btnToVisiter.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        btnToVisiter.addActionListener(e -> openVisiterPage());
+
         panel.add(btnAdd);
         panel.add(btnEdit);
         panel.add(btnDelete);
         panel.add(btnRefresh);
         panel.add(btnExport);
         panel.add(btnToSite);
+        panel.add(btnToVisiter);
 
         return panel;
     }
@@ -471,6 +477,12 @@ public class Main extends JFrame {
     private void openSitePage() {
         SitePage sitePage = new SitePage();
         sitePage.setVisible(true);
+        dispose();
+    }
+
+    private void openVisiterPage() {
+        VisiterPage visiterPage = new VisiterPage();
+        visiterPage.setVisible(true);
         dispose();
     }
     
