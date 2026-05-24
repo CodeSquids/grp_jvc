@@ -29,7 +29,7 @@ class VisiterModel:
         cursor = self.db.get_cursor()
         try:
             cursor.execute(
-                "UPDATE Visiter SET n_visiteur = %s, n_site = %s, nbjours= %s, date_visite= %s, WHERE n_visiter = %s",
+                "UPDATE Visiter SET n_visiteur = %s, n_site = %s, nbjours= %s, date_visite= %s WHERE n_visiter = %s",
                 ( n_visiteur, n_site, nbjours, date_visite ,n_visiter)
             )
             self.db.commit()

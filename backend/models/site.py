@@ -19,7 +19,7 @@ class SiteModel:
                 (n_site, nom, lieu, tarif_journalier)
             )
             self.db.commit()
-            return {'success': True, 'message': 'Visite créé avec succès'}
+            return {'success': True, 'message': 'Site cree avec succes'}
         except Exception as e:
             return {'success': False, 'message': str(e)}
         finally:
@@ -29,11 +29,11 @@ class SiteModel:
         cursor = self.db.get_cursor()
         try:
             cursor.execute(
-                "UPDATE Site SET nom = %s, lieu = %s, tarif_journalier= %s, WHERE n_site = %s",
+                "UPDATE Site SET nom = %s, lieu = %s, tarif_journalier = %s WHERE n_site = %s",
                 ( nom, lieu, tarif_journalier ,n_site)
             )
             self.db.commit()
-            return {'success': True, 'message': 'Visite mis à jour avec succès'}
+            return {'success': True, 'message': 'Site mis a jour avec succes'}
         except Exception as e:
             return {'success': False, 'message': str(e)}
         finally:
@@ -42,15 +42,15 @@ class SiteModel:
     def delete(self, n_site):
         cursor = self.db.get_cursor()
         try:
-            # Vérifier si le site a des visites
-            cursor.execute("SELECT COUNT(*) as count FROM Site WHERE n_site = %s", (n_site,))
+            # Verifier si le site a des visites.
+            cursor.execute("SELECT COUNT(*) as count FROM Visiter WHERE n_site = %s", (n_site,))
             result = cursor.fetchone()
             if result['count'] > 0:
-                return {'success': False, 'message': 'Impossible de supprimer: ce site a des visites enregistrées'}
-            
+                return {'success': False, 'message': 'Impossible de supprimer: ce site a des visites enregistrees'}
+
             cursor.execute("DELETE FROM Site WHERE n_site = %s", (n_site,))
             self.db.commit()
-            return {'success': True, 'message': 'Site supprimé avec succès'}
+            return {'success': True, 'message': 'Site supprime avec succes'}
         except Exception as e:
             return {'success': False, 'message': str(e)}
         finally:
@@ -62,4 +62,5 @@ class SiteModel:
         result = cursor.fetchone()
         cursor.close()
         return result
+
 

@@ -29,22 +29,20 @@ public class SiteService {
 
     // Rechercher site
     public static JSONArray searchSite(String n_site) throws Exception {
-        URL url = new URL(BASE_URL + "/site/" + n_site);
+        URL url = new URL(BASE_URL + "/site/" + URLEncoder.encode(n_site, "UTF-8"));
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/json");
 
-        BufferedReader reader = new BufferedReader(
-                new InputStreamReader(conn.getInputStream())
-        );
-        StringBuilder response = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            response.append(line);
+        int responseCode = conn.getResponseCode();
+        if (responseCode == 404) {
+            return new JSONArray();
         }
-        reader.close();
+        if (responseCode >= 400) {
+            throw new IOException(readResponse(conn));
+        }
 
-        return new JSONArray(response.toString());
+        return asJSONArray(readResponse(conn));
     }
 
     // Créer site
@@ -98,5 +96,32 @@ public class SiteService {
 
         int responseCode = conn.getResponseCode();
         return responseCode == 200;
+    }
+
+    private static String readResponse(HttpURLConnection conn) throws IOException {
+        InputStream stream = conn.getResponseCode() >= 400 ? conn.getErrorStream() : conn.getInputStream();
+        if (stream == null) {
+            return "";
+        }
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            response.append(line);
+        }
+        reader.close();
+        return response.toString();
+    }
+
+    private static JSONArray asJSONArray(String response) {
+        Object json = new JSONTokener(response).nextValue();
+        if (json instanceof JSONArray) {
+            return (JSONArray) json;
+        }
+
+        JSONArray result = new JSONArray();
+        result.put((JSONObject) json);
+        return result;
     }
 }

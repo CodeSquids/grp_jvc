@@ -1,195 +1,168 @@
-package com.projet;
+package com.projet.Pages;
 
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
-import java.awt.*;
-import java.awt.event.*;
-import com.projet.Pages.SitePage;
+import com.projet.Dialog.SiteCRUDDialog;
+import com.projet.Main;
+import com.projet.Services.SiteService;
+import com.projet.Tables.SiteTableModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
-public class Main extends JFrame {
+public class SitePage extends JFrame {
     private JTable table;
-    private VisiteurTableModel tableModel;
+    private SiteTableModel tableModel;
     private JTextField txtSearch;
-    private JComboBox<String> cmbSearchType;
     private JLabel lblStatus;
     private JProgressBar progressBar;
     private JLabel lblRecordCount;
-    
-    // Palette couleurs élégantes et sophistiquées
-    private static final Color COLOR_BACKGROUND = new Color(250, 248, 245);  // Beige clair élégant
-    private static final Color COLOR_PANEL = new Color(255, 255, 255);       // Blanc pur
-    private static final Color COLOR_BORDER = new Color(210, 200, 190);       // Beige grisé
-    private static final Color COLOR_HEADER_BG = new Color(45, 40, 55);       // Gris profond élégant
-    private static final Color COLOR_ACCENT = new Color(160, 130, 110);       // Brun élégant
-    private static final Color COLOR_BUTTON_ADD = new Color(200, 230, 210);   // Vert sauge clair
-    private static final Color COLOR_BUTTON_EDIT = new Color(210, 195, 220);  // Violet doux clair
-    private static final Color COLOR_BUTTON_DELETE = new Color(230, 195, 195);// Rouge terreux clair
-    private static final Color COLOR_BUTTON_REFRESH = new Color(200, 210, 220);// Gris bleuté clair
-    private static final Color COLOR_BUTTON_EXPORT = new Color(230, 210, 180); // Or cuivré clair
-    private static final Color COLOR_TABLE_HEADER = new Color(55, 50, 65);    // Header tableau
-    private static final Color COLOR_ROW_ODD = new Color(255, 255, 255);      // Lignes impaires
-    private static final Color COLOR_ROW_EVEN = new Color(248, 245, 242);     // Lignes paires
-    
-    public Main() {
-        setTitle("Gestion des Visiteurs - Système de Gestion des Sites Touristiques");
+
+    private static final Color COLOR_BACKGROUND = new Color(250, 248, 245);
+    private static final Color COLOR_PANEL = new Color(255, 255, 255);
+    private static final Color COLOR_BORDER = new Color(210, 200, 190);
+    private static final Color COLOR_HEADER_BG = new Color(45, 40, 55);
+    private static final Color COLOR_ACCENT = new Color(160, 130, 110);
+    private static final Color COLOR_BUTTON_ADD = new Color(200, 230, 210);
+    private static final Color COLOR_BUTTON_EDIT = new Color(210, 195, 220);
+    private static final Color COLOR_BUTTON_DELETE = new Color(230, 195, 195);
+    private static final Color COLOR_BUTTON_REFRESH = new Color(200, 210, 220);
+    private static final Color COLOR_BUTTON_EXPORT = new Color(230, 210, 180);
+    private static final Color COLOR_TABLE_HEADER = new Color(55, 50, 65);
+    private static final Color COLOR_ROW_ODD = new Color(255, 255, 255);
+    private static final Color COLOR_ROW_EVEN = new Color(248, 245, 242);
+
+    public SitePage() {
+        setTitle("Gestion des Sites - Système de Gestion des Sites Touristiques");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1100, 700);
         setLocationRelativeTo(null);
-        
-        // Panel principal
+
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.setBackground(COLOR_BACKGROUND);
-        
-        // Header
-        JPanel headerPanel = createHeaderPanel();
-        mainPanel.add(headerPanel, BorderLayout.NORTH);
-        
-        // Panel central
+
+        mainPanel.add(createHeaderPanel(), BorderLayout.NORTH);
+
         JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
         centerPanel.setOpaque(false);
-        
-        // Recherche
-        JPanel searchPanel = createSearchPanel();
-        centerPanel.add(searchPanel, BorderLayout.NORTH);
-        
-        // Tableau + Boutons
-        JPanel tableContainer = createTableContainer();
-        centerPanel.add(tableContainer, BorderLayout.CENTER);
-        
+        centerPanel.add(createSearchPanel(), BorderLayout.NORTH);
+        centerPanel.add(createTableContainer(), BorderLayout.CENTER);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
-        
-        // Status bar
-        JPanel statusPanel = createStatusPanel();
-        mainPanel.add(statusPanel, BorderLayout.SOUTH);
-        
+
+        mainPanel.add(createStatusPanel(), BorderLayout.SOUTH);
+
         add(mainPanel);
-        
+
         setupKeyboardShortcuts();
-        loadVisiteurs();
+        loadSites();
         updateStatus("Système prêt", "success");
     }
-    
+
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(COLOR_HEADER_BG);
         header.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
-        
-        JLabel titleLabel = new JLabel("GESTION DES VISITEURS");
+
+        JLabel titleLabel = new JLabel("GESTION DES SITES");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
-        
+
         JLabel subtitleLabel = new JLabel("Système de gestion des sites touristiques");
         subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         subtitleLabel.setForeground(new Color(200, 195, 190));
-        
+
         JPanel textPanel = new JPanel(new GridLayout(2, 1));
         textPanel.setOpaque(false);
         textPanel.add(titleLabel);
         textPanel.add(subtitleLabel);
-        
-        JLabel logoLabel = new JLabel("✦");
+
+        JLabel logoLabel = new JLabel("*");
         logoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 40));
         logoLabel.setForeground(new Color(200, 180, 150));
-        
+
         header.add(logoLabel, BorderLayout.WEST);
         header.add(textPanel, BorderLayout.CENTER);
-        
+
         return header;
     }
-    
+
     private JPanel createSearchPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBackground(COLOR_PANEL);
         panel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(COLOR_BORDER, 1),
-            BorderFactory.createEmptyBorder(15, 20, 15, 20)
+                BorderFactory.createLineBorder(COLOR_BORDER, 1),
+                BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
-        
-        JLabel titleLabel = new JLabel("Recherche avancée");
+
+        JLabel titleLabel = new JLabel("Recherche par numéro de site");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         titleLabel.setForeground(COLOR_ACCENT);
-        
+
         JPanel searchControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         searchControls.setOpaque(false);
-        
-        Font labelFont = new Font("Segoe UI", Font.PLAIN, 13);
-        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 13);
-        
-        JLabel lblSearchBy = new JLabel("Rechercher par :");
-        lblSearchBy.setFont(labelFont);
-        lblSearchBy.setForeground(Color.BLACK);
-        
-        cmbSearchType = new JComboBox<>(new String[]{"📋 Numéro", "👤 Nom"});
-        cmbSearchType.setFont(fieldFont);
-        cmbSearchType.setBackground(COLOR_PANEL);
-        cmbSearchType.setForeground(Color.BLACK);
-        cmbSearchType.setBorder(BorderFactory.createLineBorder(COLOR_BORDER));
-        
-        JLabel lblValue = new JLabel("Valeur :");
-        lblValue.setFont(labelFont);
+
+        JLabel lblValue = new JLabel("N° Site :");
+        lblValue.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         lblValue.setForeground(Color.BLACK);
-        
+
         txtSearch = new JTextField(25);
-        txtSearch.setFont(fieldFont);
+        txtSearch.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         txtSearch.setForeground(Color.BLACK);
         txtSearch.setBackground(COLOR_PANEL);
         txtSearch.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(COLOR_BORDER, 1),
-            BorderFactory.createEmptyBorder(8, 12, 8, 12)
+                BorderFactory.createLineBorder(COLOR_BORDER, 1),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)
         ));
-        
-        JButton btnSearch = createElegantButton("🔍 Rechercher", COLOR_ACCENT);
-        btnSearch.addActionListener(e -> searchVisiteur());
-        
-        JButton btnReset = createElegantButton("🔄 Réinitialiser", new Color(200, 195, 190));
+
+        JButton btnSearch = createElegantButton("Rechercher", COLOR_ACCENT);
+        btnSearch.addActionListener(e -> searchSite());
+
+        JButton btnReset = createElegantButton("Réinitialiser", new Color(200, 195, 190));
         btnReset.addActionListener(e -> {
             txtSearch.setText("");
-            loadVisiteurs();
+            loadSites();
         });
-        
-        searchControls.add(lblSearchBy);
-        searchControls.add(cmbSearchType);
+
         searchControls.add(lblValue);
         searchControls.add(txtSearch);
         searchControls.add(btnSearch);
         searchControls.add(btnReset);
-        
+
         panel.add(titleLabel, BorderLayout.NORTH);
         panel.add(searchControls, BorderLayout.CENTER);
-        
+
         return panel;
     }
-    
+
     private JPanel createTableContainer() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBackground(COLOR_PANEL);
         panel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(COLOR_BORDER, 1),
-            BorderFactory.createEmptyBorder(15, 20, 15, 20)
+                BorderFactory.createLineBorder(COLOR_BORDER, 1),
+                BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
-        
-        // Titre avec compteur
+
         JPanel titlePanel = new JPanel(new BorderLayout());
         titlePanel.setOpaque(false);
-        
-        JLabel titleLabel = new JLabel("Liste des visiteurs");
+
+        JLabel titleLabel = new JLabel("Liste des sites");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         titleLabel.setForeground(COLOR_ACCENT);
-        
+
         lblRecordCount = new JLabel("0 enregistrement(s)");
         lblRecordCount.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         lblRecordCount.setForeground(Color.DARK_GRAY);
-        
+
         titlePanel.add(titleLabel, BorderLayout.WEST);
         titlePanel.add(lblRecordCount, BorderLayout.EAST);
-        
-        // Tableau
-        tableModel = new VisiteurTableModel();
+
+        tableModel = new SiteTableModel();
         table = new JTable(tableModel);
         table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         table.setRowHeight(32);
@@ -199,17 +172,17 @@ public class Main extends JFrame {
         table.setForeground(Color.BLACK);
         table.setSelectionBackground(new Color(160, 130, 110, 40));
         table.setSelectionForeground(Color.BLACK);
-        
+
         JTableHeader header = table.getTableHeader();
         header.setFont(new Font("Segoe UI", Font.BOLD, 13));
         header.setBackground(COLOR_TABLE_HEADER);
         header.setForeground(Color.WHITE);
         header.setPreferredSize(new Dimension(header.getWidth(), 38));
-        
+
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
-                    boolean isSelected, boolean hasFocus, int row, int column) {
+                                                           boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 if (!isSelected) {
                     c.setBackground(row % 2 == 0 ? COLOR_ROW_ODD : COLOR_ROW_EVEN);
@@ -219,127 +192,115 @@ public class Main extends JFrame {
                 return c;
             }
         });
-        
+
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBorder(BorderFactory.createLineBorder(COLOR_BORDER, 1));
         scrollPane.getViewport().setBackground(COLOR_PANEL);
-        
-        // Boutons d'action
-        JPanel buttonPanel = createActionButtonPanel();
-        
+
         panel.add(titlePanel, BorderLayout.NORTH);
         panel.add(scrollPane, BorderLayout.CENTER);
-        panel.add(buttonPanel, BorderLayout.SOUTH);
-        
+        panel.add(createActionButtonPanel(), BorderLayout.SOUTH);
+
         return panel;
     }
-    
+
     private JPanel createActionButtonPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 15));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-        
-        JButton btnAdd = createElegantButton("AJOUTER UN VISITEUR", COLOR_BUTTON_ADD);
+
+        JButton btnAdd = createElegantButton("AJOUTER UN SITE", COLOR_BUTTON_ADD);
         btnAdd.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnAdd.addActionListener(e -> addVisiteur());
-        
+        btnAdd.addActionListener(e -> addSite());
+
         JButton btnEdit = createElegantButton("MODIFIER", COLOR_BUTTON_EDIT);
         btnEdit.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnEdit.addActionListener(e -> editVisiteur());
-        
+        btnEdit.addActionListener(e -> editSite());
+
         JButton btnDelete = createElegantButton("SUPPRIMER", COLOR_BUTTON_DELETE);
         btnDelete.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnDelete.addActionListener(e -> deleteVisiteur());
-        
+        btnDelete.addActionListener(e -> deleteSite());
+
         JButton btnRefresh = createElegantButton("ACTUALISER", COLOR_BUTTON_REFRESH);
         btnRefresh.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnRefresh.addActionListener(e -> loadVisiteurs());
-        
-        JButton btnExport = createElegantButton("EXPORTER", COLOR_BUTTON_EXPORT);
-        btnExport.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnExport.addActionListener(e -> exportToExcel());
+        btnRefresh.addActionListener(e -> loadSites());
 
-        JButton btnToSite = createElegantButton("CRUD SITE", COLOR_BUTTON_REFRESH);
-        btnToSite.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnToSite.addActionListener(e -> openSitePage());
+        JButton btnVisitors = createElegantButton("CRUD VISITEURS", COLOR_BUTTON_REFRESH);
+        btnVisitors.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        btnVisitors.addActionListener(e -> openVisitorPage());
 
         panel.add(btnAdd);
         panel.add(btnEdit);
         panel.add(btnDelete);
         panel.add(btnRefresh);
-        panel.add(btnExport);
-        panel.add(btnToSite);
+        panel.add(btnVisitors);
 
         return panel;
     }
-    
+
     private JPanel createStatusPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(COLOR_HEADER_BG);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        
-        lblStatus = new JLabel("✅ Système prêt");
+
+        lblStatus = new JLabel("Système prêt");
         lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         lblStatus.setForeground(Color.WHITE);
-        
+
         progressBar = new JProgressBar();
         progressBar.setVisible(false);
         progressBar.setPreferredSize(new Dimension(150, 12));
         progressBar.setBackground(new Color(80, 75, 85));
         progressBar.setForeground(COLOR_ACCENT);
-        
+
         panel.add(lblStatus, BorderLayout.WEST);
         panel.add(progressBar, BorderLayout.EAST);
-        
+
         return panel;
     }
-    
     private JButton createElegantButton(String text, Color backgroundColor) {
         JButton button = new JButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        button.setForeground(Color.BLACK);  // Texte en NOIR
+        button.setForeground(Color.BLACK);
         button.setBackground(backgroundColor);
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Bordure élégante avec contour foncé pour meilleur contraste
         button.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(COLOR_BORDER, 1),
-            BorderFactory.createEmptyBorder(9, 21, 9, 21)
+                BorderFactory.createLineBorder(COLOR_BORDER, 1),
+                BorderFactory.createEmptyBorder(9, 21, 9, 21)
         ));
-        
+
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(backgroundColor.darker());
                 button.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(COLOR_BORDER.darker(), 1),
-                    BorderFactory.createEmptyBorder(9, 21, 9, 21)
-                ));
-            }
+                        BorderFactory.createLineBorder(COLOR_BORDER.darker(), 1),
+                        BorderFactory.createEmptyBorder(9, 21, 9, 21)
+                ));            }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(backgroundColor);
                 button.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(COLOR_BORDER, 1),
-                    BorderFactory.createEmptyBorder(9, 21, 9, 21)
-                ));
-            }
+                        BorderFactory.createLineBorder(COLOR_BORDER, 1),
+                        BorderFactory.createEmptyBorder(9, 21, 9, 21)
+                ));            }
         });
-        
+
         return button;
     }
-    
+
     private void setupKeyboardShortcuts() {
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-            .put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "refresh");
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "refresh");
         getRootPane().getActionMap().put("refresh", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loadVisiteurs();
+                loadSites();
             }
         });
-        
+
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-            .put(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK), "focusSearch");
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK), "focusSearch");
         getRootPane().getActionMap().put("focusSearch", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -347,7 +308,7 @@ public class Main extends JFrame {
             }
         });
     }
-    
+
     private void updateStatus(String message, String type) {
         String icon = switch (type) {
             case "success" -> "✓ ";
@@ -356,34 +317,34 @@ public class Main extends JFrame {
             default -> "ℹ ";
         };
         lblStatus.setText(icon + message);
-        
+
         if (!type.equals("error")) {
             Timer timer = new Timer(3000, e -> lblStatus.setText("✓ Système prêt"));
             timer.setRepeats(false);
             timer.start();
         }
     }
-    
-    private void loadVisiteurs() {
+
+    private void loadSites() {
         showProgress(true);
         SwingWorker<JSONArray, Void> worker = new SwingWorker<JSONArray, Void>() {
             @Override
             protected JSONArray doInBackground() throws Exception {
-                return VisiteurService.getAllVisiteurs();
+                return SiteService.getAllSite();
             }
-            
+
             @Override
             protected void done() {
                 try {
                     JSONArray result = get();
-                    tableModel.setVisiteurs(result);
+                    tableModel.setSite(result);
                     lblRecordCount.setText(result.length() + " enregistrement(s)");
-                    updateStatus("Données chargées (" + result.length() + " visiteurs)", "success");
+                    updateStatus("Données chargées (" + result.length() + " sites)", "success");
                 } catch (Exception e) {
                     updateStatus("Erreur de connexion au serveur", "error");
-                    JOptionPane.showMessageDialog(Main.this, 
-                        "Impossible de charger les données.\nVérifiez que le serveur backend est démarré sur http://localhost:5000",
-                        "Erreur de connexion", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(SitePage.this,
+                            "Impossible de charger les données.\nVérifiez que le serveur backend est démarré sur http://localhost:5000",
+                            "Erreur de connexion", JOptionPane.ERROR_MESSAGE);
                 } finally {
                     showProgress(false);
                 }
@@ -391,36 +352,31 @@ public class Main extends JFrame {
         };
         worker.execute();
     }
-    
-    private void searchVisiteur() {
-        String critere = cmbSearchType.getSelectedIndex() == 0 ? "numero" : "nom";
-        String valeur = txtSearch.getText().trim();
-        
-        if (valeur.isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "Veuillez entrer une valeur de recherche !", 
-                "Recherche", JOptionPane.INFORMATION_MESSAGE);
+
+    private void searchSite() {
+        String value = txtSearch.getText().trim();
+
+        if (value.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Veuillez entrer un numéro de site !",
+                    "Recherche", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        
+
         showProgress(true);
         SwingWorker<JSONArray, Void> worker = new SwingWorker<JSONArray, Void>() {
             @Override
             protected JSONArray doInBackground() throws Exception {
-                return VisiteurService.searchVisiteur(critere, valeur);
+                return SiteService.searchSite(value);
             }
-            
+
             @Override
             protected void done() {
                 try {
                     JSONArray result = get();
-                    tableModel.setVisiteurs(result);
+                    tableModel.setSite(result);
                     lblRecordCount.setText(result.length() + " enregistrement(s)");
-                    if (result.length() == 0) {
-                        updateStatus("Aucun résultat pour: " + valeur, "warning");
-                    } else {
-                        updateStatus(result.length() + " visiteur(s) trouvé(s)", "success");
-                    }
+                    updateStatus(result.length() == 0 ? "Aucun résultat pour: " + value : "Site trouvé", "success");
                 } catch (Exception e) {
                     updateStatus("Erreur de recherche", "error");
                 } finally {
@@ -430,29 +386,30 @@ public class Main extends JFrame {
         };
         worker.execute();
     }
-    
-    private void addVisiteur() {
-        VisiteurCRUDDialog dialog = new VisiteurCRUDDialog(this, "add", null, null, null);
+
+    private void addSite() {
+        SiteCRUDDialog dialog = new SiteCRUDDialog(this, "add", null, null, null, null);
         dialog.setVisible(true);
-        
+
         if (dialog.isSaved()) {
             showProgress(true);
-            SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+            SwingWorker<Boolean, Void> worker = new SwingWorker<>() {
                 @Override
                 protected Boolean doInBackground() throws Exception {
-                    return VisiteurService.createVisiteur(
-                        dialog.getNumero(), 
-                        dialog.getNom(), 
-                        dialog.getAdresse()
+                    return SiteService.createSite(
+                            dialog.getNumero(),
+                            dialog.getNom(),
+                            dialog.getLieu(),
+                            dialog.getTarifJournalier()
                     );
                 }
-                
+
                 @Override
                 protected void done() {
                     try {
                         if (get()) {
-                            updateStatus("Visiteur ajouté avec succès !", "success");
-                            loadVisiteurs();
+                            updateStatus("Site ajouté avec succès !", "success");
+                            loadSites();
                             txtSearch.setText("");
                         } else {
                             updateStatus("Erreur lors de l'ajout", "error");
@@ -468,48 +425,42 @@ public class Main extends JFrame {
         }
     }
 
-    private void openSitePage() {
-        SitePage sitePage = new SitePage();
-        sitePage.setVisible(true);
-        dispose();
-    }
-    
-
-
-    private void editVisiteur() {
+    private void editSite() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, 
-                "Veuillez sélectionner un visiteur à modifier !", 
-                "Modification", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Veuillez sélectionner un site à modifier !",
+                    "Modification", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
-        JSONObject visiteur = tableModel.getVisiteurAt(selectedRow);
-        VisiteurCRUDDialog dialog = new VisiteurCRUDDialog(this, "edit", 
-            visiteur.getString("n_visiteur"),
-            visiteur.getString("nom"),
-            visiteur.getString("adresse"));
+
+        JSONObject site = tableModel.getSiteAt(table.convertRowIndexToModel(selectedRow));
+        SiteCRUDDialog dialog = new SiteCRUDDialog(this, "edit",
+                site.getString("n_site"),
+                site.getString("nom"),
+                site.optString("lieu"),
+                getTarif(site));
         dialog.setVisible(true);
-        
+
         if (dialog.isSaved()) {
             showProgress(true);
             SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
                 @Override
                 protected Boolean doInBackground() throws Exception {
-                    return VisiteurService.updateVisiteur(
-                        dialog.getNumero(),
-                        dialog.getNom(),
-                        dialog.getAdresse()
+                    return SiteService.updateSite(
+                            dialog.getNumero(),
+                            dialog.getNom(),
+                            dialog.getLieu(),
+                            dialog.getTarifJournalier()
                     );
                 }
-                
+
                 @Override
                 protected void done() {
                     try {
                         if (get()) {
-                            updateStatus("Visiteur modifié avec succès !", "success");
-                            loadVisiteurs();
+                            updateStatus("Site modifié avec succès !", "success");
+                            loadSites();
                         } else {
                             updateStatus("Erreur lors de la modification", "error");
                         }
@@ -523,43 +474,43 @@ public class Main extends JFrame {
             worker.execute();
         }
     }
-    
-    private void deleteVisiteur() {
+
+    private void deleteSite() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, 
-                "Veuillez sélectionner un visiteur à supprimer !", 
-                "Suppression", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Veuillez sélectionner un site à supprimer !",
+                    "Suppression", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
-        JSONObject visiteur = tableModel.getVisiteurAt(selectedRow);
-        String numero = visiteur.getString("n_visiteur");
-        String nom = visiteur.getString("nom");
-        
-        int confirm = JOptionPane.showConfirmDialog(this, 
-            "Supprimer le visiteur :\n\n📋 N°: " + numero + "\n👤 Nom: " + nom + "\n\n⚠️ Cette action est irréversible !",
-            "Confirmation de suppression", 
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE);
-        
+
+        JSONObject site = tableModel.getSiteAt(table.convertRowIndexToModel(selectedRow));
+        String numero = site.getString("n_site");
+        String nom = site.getString("nom");
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Supprimer le site :\n\nN°: " + numero + "\nNom: " + nom + "\n\nCette action est irréversible !",
+                "Confirmation de suppression",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
         if (confirm == JOptionPane.YES_OPTION) {
             showProgress(true);
-            SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+            SwingWorker<Boolean, Void> worker = new SwingWorker<>() {
                 @Override
                 protected Boolean doInBackground() throws Exception {
-                    return VisiteurService.deleteVisiteur(numero);
+                    return SiteService.deleteSite(numero);
                 }
-                
+
                 @Override
                 protected void done() {
                     try {
                         if (get()) {
-                            updateStatus("Visiteur supprimé avec succès !", "success");
-                            loadVisiteurs();
+                            updateStatus("Site supprimé avec succès !", "success");
+                            loadSites();
                             txtSearch.setText("");
                         } else {
-                            updateStatus("Impossible de supprimer (visites associées)", "error");
+                            updateStatus("Impossible de supprimer le site", "error");
                         }
                     } catch (Exception e) {
                         updateStatus("Erreur: " + e.getMessage(), "error");
@@ -571,30 +522,42 @@ public class Main extends JFrame {
             worker.execute();
         }
     }
-    
-    private void exportToExcel() {
-        JOptionPane.showMessageDialog(this,
-            "Fonctionnalité d'export Excel\n\n" +
-            "Données prêtes à être exportées : " + tableModel.getRowCount() + " enregistrements",
-            "Export", JOptionPane.INFORMATION_MESSAGE);
+
+    private Float getTarif(JSONObject site) {
+        Object value = site.opt("tarif_journalier");
+        if (value instanceof Number number) {
+            return number.floatValue();
+        }
+        if (value != null) {
+            try {
+                return Float.parseFloat(value.toString());
+            } catch (NumberFormatException ignored) {
+                return null;
+            }
+        }
+        return null;
     }
-    
+
+    private void openVisitorPage() {
+        Main main = new Main();
+        main.setVisible(true);
+        dispose();
+    }
+
     private void showProgress(boolean show) {
         progressBar.setVisible(show);
         if (show) {
             progressBar.setIndeterminate(true);
         }
     }
-    
+
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        SwingUtilities.invokeLater(() -> {
-            new Main().setVisible(true);
-        });
+
+        SwingUtilities.invokeLater(() -> new SitePage().setVisible(true));
     }
 }
