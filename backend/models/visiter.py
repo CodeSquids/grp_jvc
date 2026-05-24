@@ -6,7 +6,7 @@ class VisiterModel:
     
     def get_all(self):
         cursor = self.db.get_cursor()
-        cursor.execute("SELECT * FROM Visiter ORDER BY n_visiter")
+        cursor.execute("SELECT * FROM Visiter")
         result = cursor.fetchall()
         cursor.close()
         return result
