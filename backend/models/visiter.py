@@ -78,7 +78,7 @@ class VisiterModel:
                     v.nom,
                     v.adresse,
                     s.nom AS nom_site,
-                    DATE_FORMAT(vi.date_visite, '%%d/%%m/%%Y') AS date_visite,
+                    vi.date_visite,
                     s.tarif_journalier AS tarif,
                     vi.nbjours,
                     (vi.nbjours * s.tarif_journalier) AS montant
@@ -142,8 +142,7 @@ class VisiterModel:
                     v.nom,
                     v.adresse,
                     s.nom AS nom_site,
-                    DATE_FORMAT(vi.date_visite, '%%d/%%m/%%Y') AS date_visite,
-                    s.tarif_journalier AS tarif,
+                    vi.date_visite,
                     vi.nbjours,
                     (vi.nbjours * s.tarif_journalier) AS montant
                 FROM visiter vi
