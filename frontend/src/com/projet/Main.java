@@ -7,6 +7,10 @@ import java.awt.*;
 import java.awt.event.*;
 import com.projet.Pages.SitePage;
 import com.projet.Pages.VisiterPage;
+//
+import com.projet.Pages.ComplexQueriesFrame;
+
+//
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -267,6 +271,12 @@ public class Main extends JFrame {
         JButton btnToVisiter = createElegantButton("CRUD VISITES", COLOR_BUTTON_REFRESH);
         btnToVisiter.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnToVisiter.addActionListener(e -> openVisiterPage());
+        
+        //tester comp
+        JButton btnToComp = createElegantButton("COMPLEXES", COLOR_BUTTON_REFRESH);
+        btnToComp.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        btnToComp.addActionListener(e -> openCompPage());
+        
 
         panel.add(btnAdd);
         panel.add(btnEdit);
@@ -276,6 +286,8 @@ public class Main extends JFrame {
         panel.add(btnToSite);
         panel.add(btnToVisiter);
 
+        //
+        panel.add(btnToComp);
         return panel;
     }
     
@@ -483,6 +495,13 @@ public class Main extends JFrame {
     private void openVisiterPage() {
         VisiterPage visiterPage = new VisiterPage();
         visiterPage.setVisible(true);
+        dispose();
+    }
+    
+    //
+    private void openCompPage() {
+        ComplexQueriesFrame compPage = new ComplexQueriesFrame();
+        compPage.setVisible(true);
         dispose();
     }
     

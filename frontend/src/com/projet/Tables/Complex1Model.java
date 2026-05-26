@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Complex1Model extends AbstractTableModel {
+    private static final long serialVersionUID = 1L;
     private List<JSONObject> complex1 = new ArrayList<>();
-    private String[] columns = { "N* Visiteur", "Nom", "Adresse", "Nom de site", "Date visite", "Nb jours", "Montant"};
+    private String[] columns = { "N° Visiteur", "Nom", "Adresse", "Nom de site", "Date visite", "Nb jours", "Montant"};
 
     public void setComplex1(JSONArray array) {
         complex1.clear();
@@ -41,13 +42,13 @@ public class Complex1Model extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         JSONObject v = complex1.get(rowIndex);
         switch (columnIndex) {
-            case 0: return v.getString("n_visiteur");
-            case 1: return v.getString("nom");
-            case 2: return v.getString("adresse");
-            case 3: return v.getString("nom_site");
-            case 4: return v.getString("date_visite");
-            case 5: return v.getString("nbjours");
-            case 6: return v.getString("montant");
+            case 0: return v.get("n_visiteur").toString();
+            case 1: return v.get("nom").toString();
+            case 2: return v.get("adresse").toString();
+            case 3: return v.get("nom_site").toString();
+            case 4: return v.get("date_visite").toString();
+            case 5: return v.get("nbjours").toString();
+            case 6: return v.get("montant").toString();
             default: return null;
         }
     }
