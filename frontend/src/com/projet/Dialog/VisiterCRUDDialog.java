@@ -4,9 +4,11 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 public class VisiterCRUDDialog extends JDialog {
     private JTextField txtNumero, txtVisiteur, txtSite, txtNbJours, txtDateVisite;
+    private JFormattedTextField dateField;
     private JButton btnSave, btnCancel;
     private boolean saved = false;
     private String mode;
@@ -14,7 +16,7 @@ public class VisiterCRUDDialog extends JDialog {
     private static final Color COLOR_PRIMARY = new Color(41, 128, 185);
     private static final Color COLOR_SUCCESS = new Color(39, 174, 96);
     private static final Color COLOR_DANGER = new Color(231, 76, 60);
-    
+
     public VisiterCRUDDialog(JFrame parent, String mode, String numero, String visiteur, String site, Integer nbJours, String dateVisite) {
         super(parent, mode.equals("add") ? "➕ Ajouter une visite" : "✏️ Modifier une visite", true);
         this.mode = mode;
@@ -98,19 +100,37 @@ public class VisiterCRUDDialog extends JDialog {
         formPanel.add(txtNbJours, gbc);
         
         // Date Visite
+//        gbc.gridx = 0;
+//        gbc.gridy = 4;
+//        JLabel lblDateVisite = new JLabel("Date Visite *");
+//        lblDateVisite.setFont(labelFont);
+//        lblDateVisite.setForeground(COLOR_PRIMARY);
+//        formPanel.add(lblDateVisite, gbc);
+//
+//        gbc.gridx = 1;
+//        txtDateVisite = new JTextField(dateVisite != null ? dateVisite : "", 20);
+//        txtDateVisite.setFont(fieldFont);
+//        txtDateVisite.setBorder(createTextFieldBorder());
+//        txtDateVisite.setPreferredSize(new Dimension(250, 35));
+//        formPanel.add(txtDateVisite, gbc);
+
         gbc.gridx = 0;
         gbc.gridy = 4;
-        JLabel lblDateVisite = new JLabel("Date Visite *");
-        lblDateVisite.setFont(labelFont);
-        lblDateVisite.setForeground(COLOR_PRIMARY);
-        formPanel.add(lblDateVisite, gbc);
-        
+        JLabel lblFormattedDate = new JLabel("Date Visite *");
+        lblFormattedDate.setFont(labelFont);
+        lblFormattedDate.setForeground(COLOR_PRIMARY);
+        formPanel.add(lblFormattedDate, gbc);
+
         gbc.gridx = 1;
-        txtDateVisite = new JTextField(dateVisite != null ? dateVisite : "", 20);
-        txtDateVisite.setFont(fieldFont);
-        txtDateVisite.setBorder(createTextFieldBorder());
-        txtDateVisite.setPreferredSize(new Dimension(250, 35));
-        formPanel.add(txtDateVisite, gbc);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        dateField = new JFormattedTextField(dateFormat);
+        dateField.setFont(fieldFont);
+        dateField.setBorder(createTextFieldBorder());
+        dateField.setPreferredSize(new Dimension(250, 35));
+        dateField.setColumns(10);
+        dateField.setValue(dateVisite != null ? Date.valueOf(dateVisite) : new java.util.Date());
+        formPanel.add(dateField, gbc);
         
         // Ajout d'un espacement pour que les champs prennent toute la largeur disponible
         gbc.gridx = 1;
@@ -140,7 +160,7 @@ public class VisiterCRUDDialog extends JDialog {
         
         add(mainPanel);
         
-        setSize(500, 430);
+        setSize(500, 490);
         setLocationRelativeTo(parent);
         setResizable(false);
     }
@@ -178,7 +198,7 @@ public class VisiterCRUDDialog extends JDialog {
         String visiteur = txtVisiteur.getText().trim();
         String site = txtSite.getText().trim();
         String nbJours = txtNbJours.getText().trim();
-        String dateVisite = txtDateVisite.getText().trim();
+        String dateVisite = dateField.getText().trim();
         
         if (numero.isEmpty() || visiteur.isEmpty() || site.isEmpty() || nbJours.isEmpty() || dateVisite.isEmpty()) {
             JOptionPane.showMessageDialog(this, 
@@ -235,6 +255,6 @@ public class VisiterCRUDDialog extends JDialog {
     }
     
     public Date getDateVisite() {
-        return Date.valueOf(txtDateVisite.getText().trim());
+        return Date.valueOf(dateField.getText().trim());
     }
 }
