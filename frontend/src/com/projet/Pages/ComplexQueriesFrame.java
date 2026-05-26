@@ -439,14 +439,14 @@ public class ComplexQueriesFrame extends JFrame {
                         Date startDate = getStartDate2(periode);
                         Date endDate = getEndDate2(periode);
                         
-                        if (siteNom != null && !siteNom.equals("Tous les sites")) {
-                            // Pour un site spécifique, on utilise complex1 avec agrégation
-                            JSONArray visites = VisiterService.complex1(siteNom, startDate, endDate);
-                            // Transformer en format statistique
-                            result = agregerStatsParSite(visites, siteNom);
-                        } else {
+//                        if (siteNom != null && !siteNom.equals("Tous les sites")) {
+//                            // Pour un site spécifique, on utilise complex1 avec agrégation
+//                            JSONArray visites = VisiterService.complex1(siteNom, startDate, endDate);
+//                            // Transformer en format statistique
+//                            result = agregerStatsParSite(visites, siteNom);
+//                        } else {
                             result = VisiterService.complex2(startDate, endDate);
-                        }
+//                        }
                     }
                     
                     complex2Model.setComplex2(result);
