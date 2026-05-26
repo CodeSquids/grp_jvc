@@ -64,7 +64,7 @@ public class ComplexQueriesFrame extends JFrame {
         setTitle("📊 Gestion des Visites - Requêtes Complexes");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
-        
+
         // Panel principal
         mainPanel = new JPanel(new GridLayout(2, 1, 10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -87,10 +87,17 @@ public class ComplexQueriesFrame extends JFrame {
         // Panel de statut
         JPanel statusPanel = createStatusPanel();
         
+        add(new Header(
+                this,
+                "REQUETES COMPLEXES",
+                "Statistiques et recherches avancees",
+                Header.ActivePage.COMPLEX
+        ), BorderLayout.NORTH);
         add(mainPanel, BorderLayout.CENTER);
         add(statusPanel, BorderLayout.SOUTH);
         
-        setSize(1400, 950);
+//        setSize(1400, 950);
+        setSize(1100, 700);
         setLocationRelativeTo(null);
         setVisible(true);
         

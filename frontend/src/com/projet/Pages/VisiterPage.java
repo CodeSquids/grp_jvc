@@ -45,7 +45,12 @@ public class VisiterPage extends JFrame {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.setBackground(COLOR_BACKGROUND);
 
-        mainPanel.add(createHeaderPanel(), BorderLayout.NORTH);
+        mainPanel.add(new Header(
+                this,
+                "GESTION DES VISITES",
+                "Système de gestion des visites touristiques",
+                Header.ActivePage.VISITS
+        ), BorderLayout.NORTH);
 
         JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
         centerPanel.setOpaque(false);
@@ -59,34 +64,6 @@ public class VisiterPage extends JFrame {
         setupKeyboardShortcuts();
         loadVisiter();
         updateStatus("Systeme pret", "success");
-    }
-
-    private JPanel createHeaderPanel() {
-        JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(COLOR_HEADER_BG);
-        header.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
-
-        JLabel titleLabel = new JLabel("GESTION DES VISITES");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        titleLabel.setForeground(Color.WHITE);
-
-        JLabel subtitleLabel = new JLabel("Systeme de gestion des visites touristiques");
-        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        subtitleLabel.setForeground(new Color(200, 195, 190));
-
-        JPanel textPanel = new JPanel(new GridLayout(2, 1));
-        textPanel.setOpaque(false);
-        textPanel.add(titleLabel);
-        textPanel.add(subtitleLabel);
-
-        JLabel logoLabel = new JLabel("*");
-        logoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 40));
-        logoLabel.setForeground(new Color(200, 180, 150));
-
-        header.add(logoLabel, BorderLayout.WEST);
-        header.add(textPanel, BorderLayout.CENTER);
-
-        return header;
     }
 
     private JPanel createSearchPanel() {
@@ -222,21 +199,10 @@ public class VisiterPage extends JFrame {
         btnRefresh.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnRefresh.addActionListener(e -> loadVisiter());
 
-        JButton btnVisitors = createElegantButton("CRUD VISITEURS", COLOR_BUTTON_REFRESH);
-        btnVisitors.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnVisitors.addActionListener(e -> openVisitorPage());
-
-        JButton btnSites = createElegantButton("CRUD SITES", COLOR_BUTTON_REFRESH);
-        btnSites.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnSites.addActionListener(e -> openSitePage());
-
         panel.add(btnAdd);
         panel.add(btnEdit);
         panel.add(btnDelete);
         panel.add(btnRefresh);
-        panel.add(btnVisitors);
-        panel.add(btnSites);
-
         return panel;
     }
 
