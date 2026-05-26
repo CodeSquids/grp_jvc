@@ -176,7 +176,7 @@ public class SitePage extends JFrame {
         JTableHeader header = table.getTableHeader();
         header.setFont(new Font("Segoe UI", Font.BOLD, 13));
         header.setBackground(COLOR_TABLE_HEADER);
-        header.setForeground(Color.WHITE);
+        header.setForeground(Color.BLACK);
         header.setPreferredSize(new Dimension(header.getWidth(), 38));
 
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {

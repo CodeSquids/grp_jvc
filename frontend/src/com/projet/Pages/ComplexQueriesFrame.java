@@ -175,7 +175,7 @@ public class ComplexQueriesFrame extends JFrame {
         complex1Table.setRowHeight(25);
         complex1Table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
         complex1Table.getTableHeader().setBackground(COLOR_PRIMARY);
-        complex1Table.getTableHeader().setForeground(Color.WHITE);
+        complex1Table.getTableHeader().setForeground(Color.BLACK);
         
         JScrollPane scrollPane = new JScrollPane(complex1Table);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
@@ -250,7 +250,7 @@ public class ComplexQueriesFrame extends JFrame {
         complex2Table.setRowHeight(25);
         complex2Table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
         complex2Table.getTableHeader().setBackground(COLOR_INFO);
-        complex2Table.getTableHeader().setForeground(Color.WHITE);
+        complex2Table.getTableHeader().setForeground(Color.BLACK);
         
         JScrollPane scrollPane = new JScrollPane(complex2Table);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
