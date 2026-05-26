@@ -38,7 +38,6 @@ public class ComplexQueriesFrame extends JFrame {
     private JButton btnReinitialiser1;
     
     // Filtres pour complex2
-    private JComboBox<String> cmbFiltreSite2;
     private JComboBox<String> cmbPeriode2;
     private JTextField txtAnnee2;
     private JTextField txtMois2;
@@ -198,11 +197,6 @@ public class ComplexQueriesFrame extends JFrame {
         // Ligne 1 : Filtres
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
         topPanel.setBackground(Color.WHITE);
-        
-//        topPanel.add(createLabel("Filtrer par site :"));
-//        cmbFiltreSite2 = new JComboBox<>(sites);
-//        cmbFiltreSite2.setPreferredSize(new Dimension(180, 30));
-//        topPanel.add(cmbFiltreSite2);
         
         topPanel.add(createLabel("Période :"));
         cmbPeriode2 = new JComboBox<>(new String[]{"Toute l'année en cours", "Année spécifique", "Mois spécifique", "Entre 2 dates"});
@@ -420,7 +414,6 @@ public class ComplexQueriesFrame extends JFrame {
     }
     
     private void appliquerFiltres2() {
-        String siteNom = (String) cmbFiltreSite2.getSelectedItem();
         String periode = (String) cmbPeriode2.getSelectedItem();
         
         if (!validerPeriodes2(periode)) return;
