@@ -7,7 +7,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 
 public class VisiterCRUDDialog extends JDialog {
-    private JTextField txtNumero, txtVisiteur, txtSite, txtNbJours, txtDateVisite;
+    private JTextField txtNumero, txtVisiteur, txtSite, txtNbJours;
     private JFormattedTextField dateField;
     private JButton btnSave, btnCancel;
     private boolean saved = false;
@@ -99,20 +99,7 @@ public class VisiterCRUDDialog extends JDialog {
         txtNbJours.setPreferredSize(new Dimension(250, 35));
         formPanel.add(txtNbJours, gbc);
         
-        // Date Visite
-//        gbc.gridx = 0;
-//        gbc.gridy = 4;
-//        JLabel lblDateVisite = new JLabel("Date Visite *");
-//        lblDateVisite.setFont(labelFont);
-//        lblDateVisite.setForeground(COLOR_PRIMARY);
-//        formPanel.add(lblDateVisite, gbc);
-//
-//        gbc.gridx = 1;
-//        txtDateVisite = new JTextField(dateVisite != null ? dateVisite : "", 20);
-//        txtDateVisite.setFont(fieldFont);
-//        txtDateVisite.setBorder(createTextFieldBorder());
-//        txtDateVisite.setPreferredSize(new Dimension(250, 35));
-//        formPanel.add(txtDateVisite, gbc);
+
 
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -129,7 +116,7 @@ public class VisiterCRUDDialog extends JDialog {
         dateField.setBorder(createTextFieldBorder());
         dateField.setPreferredSize(new Dimension(250, 35));
         dateField.setColumns(10);
-        dateField.setValue(dateVisite != null ? Date.valueOf(dateVisite) : new java.util.Date());
+        dateField.setValue(parseDateVisiteOrToday(dateVisite));
         formPanel.add(dateField, gbc);
         
         // Ajout d'un espacement pour que les champs prennent toute la largeur disponible
@@ -221,7 +208,7 @@ public class VisiterCRUDDialog extends JDialog {
         
         // Validation de la date
         try {
-            Date.valueOf(dateVisite);
+            parseDateVisite(dateVisite);
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this,
                 "La date doit être au format yyyy-mm-dd !",
@@ -255,6 +242,46 @@ public class VisiterCRUDDialog extends JDialog {
     }
     
     public Date getDateVisite() {
-        return Date.valueOf(dateField.getText().trim());
+        return parseDateVisite(dateField.getText());
+    }
+
+    private Date parseDateVisiteOrToday(String dateVisite) {
+        try {
+            return parseDateVisite(dateVisite);
+        } catch (IllegalArgumentException e) {
+            return new Date(System.currentTimeMillis());
+        }
+    }
+
+    private Date parseDateVisite(String dateVisite) {
+        String normalizedDate = normalizeDateVisite(dateVisite);
+        return Date.valueOf(normalizedDate);
+    }
+
+    private String normalizeDateVisite(String dateVisite) {
+        if (dateVisite == null) {
+            throw new IllegalArgumentException("Date visite manquante");
+        }
+
+        String trimmedDate = dateVisite.trim();
+        if (trimmedDate.isEmpty() || trimmedDate.equalsIgnoreCase("null")) {
+            throw new IllegalArgumentException("Date visite manquante");
+        }
+
+        if (trimmedDate.length() >= 10
+                && Character.isDigit(trimmedDate.charAt(0))
+                && Character.isDigit(trimmedDate.charAt(1))
+                && Character.isDigit(trimmedDate.charAt(2))
+                && Character.isDigit(trimmedDate.charAt(3))
+                && trimmedDate.charAt(4) == '-'
+                && Character.isDigit(trimmedDate.charAt(5))
+                && Character.isDigit(trimmedDate.charAt(6))
+                && trimmedDate.charAt(7) == '-'
+                && Character.isDigit(trimmedDate.charAt(8))
+                && Character.isDigit(trimmedDate.charAt(9))) {
+            return trimmedDate.substring(0, 10);
+        }
+
+        return trimmedDate;
     }
 }

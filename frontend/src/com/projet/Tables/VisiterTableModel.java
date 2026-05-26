@@ -44,9 +44,32 @@ public class VisiterTableModel extends AbstractTableModel {
             case 0: return v.opt("n_visiter");
             case 1: return v.opt("n_visiteur");
             case 2: return v.opt("n_site");
-            case 3: return v.opt("nbjours");
-            case 4: return v.opt("date_visite");
+            case 3: return v.opt("nbjours") + " j";
+            case 4: return formatDateVisite(v.opt("date_visite"));
             default: return null;
         }
+    }
+
+    private String formatDateVisite(Object dateVisite) {
+        if (dateVisite == null || JSONObject.NULL.equals(dateVisite)) {
+            return "";
+        }
+
+        String value = dateVisite.toString().trim();
+        if (value.length() >= 10
+                && Character.isDigit(value.charAt(0))
+                && Character.isDigit(value.charAt(1))
+                && Character.isDigit(value.charAt(2))
+                && Character.isDigit(value.charAt(3))
+                && value.charAt(4) == '-'
+                && Character.isDigit(value.charAt(5))
+                && Character.isDigit(value.charAt(6))
+                && value.charAt(7) == '-'
+                && Character.isDigit(value.charAt(8))
+                && Character.isDigit(value.charAt(9))) {
+            return value.substring(0, 10);
+        }
+
+        return value.replaceFirst("\\s+\\d{2}:\\d{2}:\\d{2}\\s+.*$", "");
     }
 }
