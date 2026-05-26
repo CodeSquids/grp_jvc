@@ -118,12 +118,20 @@ public class VisiterService {
         return sendGetJsonBody(BASE_URL + "/visiter/complex1", json);
     }
 
+    public static JSONArray complex3() throws Exception {
+        return sendGetJsonBody(BASE_URL + "/visiter/complex3");
+    }
+
     public static JSONArray complex2(Date date_start, Date date_end) throws Exception {
         JSONObject json = new JSONObject();
         json.put("date_start", date_start.toString());
         json.put("date_end", date_end.toString());
 
         return sendGetJsonBody(BASE_URL + "/visiter/complex2", json);
+    }
+
+    public static JSONArray complex4() throws Exception {
+        return sendGetJsonBody(BASE_URL + "/visiter/complex4");
     }
 
     private static JSONArray sendGetJsonBody(String url, JSONObject json) throws Exception {
