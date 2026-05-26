@@ -114,4 +114,51 @@ class VisiterModel:
             return {'success': False, 'message': str(e)}
         finally:
             cursor.close() 
-    
+
+    def complex3(self):
+        cursor = self.db.get_cursor()
+        try:
+            query = """
+                SELECT 
+                    v.n_visiteur,
+                    v.nom,
+                    v.adresse,
+                    s.nom AS nom_site,
+                    vi.date_visite,
+                    vi.nbjours,
+                    vi.nbjours * s.tarif_journalier AS montant
+                FROM visiter vi
+                JOIN visiteur v 
+                    ON vi.n_visiteur = v.n_visiteur
+                JOIN site s 
+                    ON vi.n_site = s.n_site
+            """
+            cursor.execute(query)
+            result = cursor.fetchall()
+            return result
+        except Exception as e:
+            return {'success': False, 'message': str(e)}
+        finally:
+            cursor.close()
+
+    def complex4(self):
+        cursor = self.db.get_cursor()
+        try:
+            query = """
+                SELECT 
+                    s.n_site,
+                    s.nom AS nom_site,
+                    COUNT(DISTINCT vi.n_visiteur) AS effectif,
+                    SUM(vi.nbjours * s.tarif_journalier) AS montant
+                FROM visiter vi
+                JOIN site s
+                    ON vi.n_site = s.n_site
+                GROUP BY s.n_site, s.nom;
+            """
+            cursor.execute(query)
+            result = cursor.fetchall()
+            return result
+        except Exception as e:
+            return {'success': False, 'message': str(e)}
+        finally:
+            cursor.close() 

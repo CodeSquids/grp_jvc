@@ -70,6 +70,16 @@ def complex1():
     resultats = visiter_model.complex1(site_nom, date_start, date_end)
     return jsonify(resultats)
 
+@visiter_bp.route('/api/visiter/complex3', methods=['GET'])
+def complex3():
+    resultats = visiter_model.complex3()
+    return jsonify(resultats)
+
+@visiter_bp.route('/api/visiter/complex4', methods=['GET'])
+def complex4():
+    resultats = visiter_model.complex4()
+    return jsonify(resultats)
+
 @visiter_bp.route('/api/visiter/complex2', methods=['GET'])
 def complex2():
     """Requête complexe 2"""
