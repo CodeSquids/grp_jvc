@@ -199,10 +199,10 @@ public class ComplexQueriesFrame extends JFrame {
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
         topPanel.setBackground(Color.WHITE);
         
-        topPanel.add(createLabel("Filtrer par site :"));
-        cmbFiltreSite2 = new JComboBox<>(sites);
-        cmbFiltreSite2.setPreferredSize(new Dimension(180, 30));
-        topPanel.add(cmbFiltreSite2);
+//        topPanel.add(createLabel("Filtrer par site :"));
+//        cmbFiltreSite2 = new JComboBox<>(sites);
+//        cmbFiltreSite2.setPreferredSize(new Dimension(180, 30));
+//        topPanel.add(cmbFiltreSite2);
         
         topPanel.add(createLabel("Période :"));
         cmbPeriode2 = new JComboBox<>(new String[]{"Toute l'année en cours", "Année spécifique", "Mois spécifique", "Entre 2 dates"});
