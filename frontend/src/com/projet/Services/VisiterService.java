@@ -119,7 +119,23 @@ public class VisiterService {
     }
 
     public static JSONArray complex3() throws Exception {
-        return sendGetJsonBody(BASE_URL + "/visiter/complex3");
+
+        URL url = new URL(BASE_URL + "/visiter/complex3");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Accept", "application/json");
+
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(conn.getInputStream())
+        );
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            response.append(line);
+        }
+        reader.close();
+
+        return new JSONArray(response.toString());
     }
 
     public static JSONArray complex2(Date date_start, Date date_end) throws Exception {
@@ -131,7 +147,22 @@ public class VisiterService {
     }
 
     public static JSONArray complex4() throws Exception {
-        return sendGetJsonBody(BASE_URL + "/visiter/complex4");
+        URL url = new URL(BASE_URL + "/visiter/complex4");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Accept", "application/json");
+
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(conn.getInputStream())
+        );
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            response.append(line);
+        }
+        reader.close();
+
+        return new JSONArray(response.toString());
     }
 
     private static JSONArray sendGetJsonBody(String url, JSONObject json) throws Exception {
