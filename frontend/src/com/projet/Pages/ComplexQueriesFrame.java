@@ -49,6 +49,8 @@ public class ComplexQueriesFrame extends JFrame {
     
     private JProgressBar progressBar;
     private JLabel lblStatus;
+    //
+    private JLabel lblTotal1;  // Ajouter avec les autres composants
     
     private static final Color COLOR_PRIMARY = new Color(41, 128, 185);
     private static final Color COLOR_SUCCESS = new Color(39, 174, 96);
@@ -178,6 +180,18 @@ public class ComplexQueriesFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(complex1Table);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
         
+        
+        //
+     // Après le scrollPane, avant complex1Panel.add
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomPanel.setBackground(Color.WHITE);
+        lblTotal1 = new JLabel("Total: 0,00 Ar");
+        lblTotal1.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblTotal1.setForeground(COLOR_PRIMARY);
+        bottomPanel.add(lblTotal1);
+
+        complex1Panel.add(bottomPanel, BorderLayout.SOUTH);
+  //
         complex1Panel.add(filterPanel, BorderLayout.NORTH);
         complex1Panel.add(scrollPane, BorderLayout.CENTER);
         
@@ -319,19 +333,55 @@ public class ComplexQueriesFrame extends JFrame {
         chargerToutesStats();
     }
     
+//    private void chargerToutesVisites() {
+//        setLoading(true);
+//        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+//            @Override
+//            protected Void doInBackground() throws Exception {
+//                try {
+//                    // Utiliser une grande plage de dates pour avoir toutes les données
+//                    Date startDate = Date.valueOf("2000-01-01");
+//                    Date endDate = Date.valueOf(LocalDate.now().plusYears(10).toString());
+//                    String siteNom = "Tous les sites";
+//                    
+//                    JSONArray result = VisiterService.complex1(siteNom, startDate, endDate);
+//                    complex1Model.setComplex1(result);
+//                    
+//                    int count = result.length();
+//                    if (count == 0) {
+//                        lblStatus.setText("ℹ️ Aucune visite trouvée dans la base de données");
+//                    } else {
+//                        lblStatus.setText("✅ Toutes les visites chargées - " + count + " visiteur(s) trouvé(s)");
+//                    }
+//                } catch (Exception e) {
+//                    lblStatus.setText("❌ Erreur: " + e.getMessage());
+//                    complex1Model.setComplex1(new JSONArray());
+//                }
+//                return null;
+//            }
+//            @Override
+//            protected void done() { setLoading(false); }
+//        };
+//        worker.execute();
+//    }
     private void chargerToutesVisites() {
         setLoading(true);
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    // Utiliser une grande plage de dates pour avoir toutes les données
                     Date startDate = Date.valueOf("2000-01-01");
                     Date endDate = Date.valueOf(LocalDate.now().plusYears(10).toString());
                     String siteNom = "Tous les sites";
                     
                     JSONArray result = VisiterService.complex1(siteNom, startDate, endDate);
                     complex1Model.setComplex1(result);
+                    
+                    // Mettre à jour le total
+                    double total = complex1Model.getTotalMontant();
+                    SwingUtilities.invokeLater(() -> {
+                        lblTotal1.setText("Total: " + String.format("%,.2f", total) + " Ar");
+                    });
                     
                     int count = result.length();
                     if (count == 0) {
@@ -342,6 +392,9 @@ public class ComplexQueriesFrame extends JFrame {
                 } catch (Exception e) {
                     lblStatus.setText("❌ Erreur: " + e.getMessage());
                     complex1Model.setComplex1(new JSONArray());
+                    SwingUtilities.invokeLater(() -> {
+                        lblTotal1.setText("Total: 0,00 Ar");
+                    });
                 }
                 return null;
             }
@@ -350,7 +403,7 @@ public class ComplexQueriesFrame extends JFrame {
         };
         worker.execute();
     }
-    
+    //
     private void chargerToutesStats() {
         setLoading(true);
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
@@ -378,6 +431,40 @@ public class ComplexQueriesFrame extends JFrame {
         worker.execute();
     }
     
+//    private void appliquerFiltres1() {
+//        String siteNom = (String) cmbFiltreSite1.getSelectedItem();
+//        String periode = (String) cmbPeriode1.getSelectedItem();
+//        
+//        if (!validerPeriodes1(periode)) return;
+//        
+//        setLoading(true);
+//        
+//        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+//            @Override
+//            protected Void doInBackground() throws Exception {
+//                try {
+//                    Date startDate = getStartDate1(periode);
+//                    Date endDate = getEndDate1(periode);
+//                    
+//                    JSONArray result = VisiterService.complex1(siteNom, startDate, endDate);
+//                    complex1Model.setComplex1(result);
+//                    
+//                    int count = result.length();
+//                    if (count == 0) {
+//                        lblStatus.setText("⚠️ Aucun résultat pour les filtres sélectionnés");
+//                    } else {
+//                        lblStatus.setText("✅ Filtres appliqués - " + count + " visiteur(s) trouvé(s)");
+//                    }
+//                } catch (Exception e) {
+//                    lblStatus.setText("❌ Erreur: " + e.getMessage());
+//                }
+//                return null;
+//            }
+//            @Override
+//            protected void done() { setLoading(false); }
+//        };
+//        worker.execute();
+//    }
     private void appliquerFiltres1() {
         String siteNom = (String) cmbFiltreSite1.getSelectedItem();
         String periode = (String) cmbPeriode1.getSelectedItem();
@@ -396,6 +483,12 @@ public class ComplexQueriesFrame extends JFrame {
                     JSONArray result = VisiterService.complex1(siteNom, startDate, endDate);
                     complex1Model.setComplex1(result);
                     
+                    // Mettre à jour le total
+                    double total = complex1Model.getTotalMontant();
+                    SwingUtilities.invokeLater(() -> {
+                        lblTotal1.setText("Total: " + String.format("%,.2f", total) + " Ar");
+                    });
+                    
                     int count = result.length();
                     if (count == 0) {
                         lblStatus.setText("⚠️ Aucun résultat pour les filtres sélectionnés");
@@ -412,6 +505,8 @@ public class ComplexQueriesFrame extends JFrame {
         };
         worker.execute();
     }
+    
+    //
     
     private void appliquerFiltres2() {
         String periode = (String) cmbPeriode2.getSelectedItem();
