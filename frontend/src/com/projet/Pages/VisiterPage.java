@@ -316,15 +316,15 @@ public class VisiterPage extends JFrame {
 
     private void updateStatus(String message, String type) {
         String icon = switch (type) {
-            case "success" -> "";
-            case "error" -> "Erreur: ";
-            case "warning" -> "Attention: ";
-            default -> "";
+            case "success" -> "✓ ";
+            case "error" -> "✗ ";
+            case "warning" -> "⚠ ";
+            default -> "ℹ ";
         };
         lblStatus.setText(icon + message);
 
         if (!type.equals("error")) {
-            Timer timer = new Timer(3000, e -> lblStatus.setText("Systeme pret"));
+            Timer timer = new Timer(3000, e -> lblStatus.setText("✓ Systeme pret"));
             timer.setRepeats(false);
             timer.start();
         }
@@ -493,16 +493,14 @@ public class VisiterPage extends JFrame {
 
         JSONObject visiter = tableModel.getVisiterAt(table.convertRowIndexToModel(selectedRow));
         String numero = visiter.optString("n_visiter");
+        String nom = visiter.getString("n_visiteur");
 
-        VisiterCRUDDialog dialog = new VisiterCRUDDialog(this, "delete",
-                numero,
-                visiter.optString("n_visiteur"),
-                visiter.optString("n_site"),
-                getInteger(visiter, "nbjours"),
-                visiter.optString("date_visite"));
-        dialog.setVisible(true);
-
-        if (dialog.isSaved()) {
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Supprimer le site :\n\nN°: " + numero + "\nNom: " + nom + "\n\nCette action est irréversible !",
+                "Confirmation de suppression",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+        if (confirm == JOptionPane.YES_OPTION) {
             showProgress(true);
             SwingWorker<Boolean, Void> worker = new SwingWorker<>() {
                 @Override
