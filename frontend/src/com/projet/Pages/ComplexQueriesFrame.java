@@ -96,8 +96,7 @@ public class ComplexQueriesFrame extends JFrame {
         add(mainPanel, BorderLayout.CENTER);
         add(statusPanel, BorderLayout.SOUTH);
         
-//        setSize(1400, 950);
-        setSize(1100, 700);
+        setSize(1400, 950);
         setLocationRelativeTo(null);
         setVisible(true);
         

@@ -40,7 +40,9 @@ public class SitePage extends JFrame {
     public SitePage() {
         setTitle("Gestion des Sites - Système de Gestion des Sites Touristiques");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1100, 700);
+//        setSize(1100, 700);
+        setSize(1400, 950);
+
         setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));

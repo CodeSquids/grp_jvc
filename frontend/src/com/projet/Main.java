@@ -43,7 +43,9 @@ public class Main extends JFrame {
     public Main() {
         setTitle("Gestion des Visiteurs - Système de Gestion des Sites Touristiques");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1100, 700);
+//        setSize(1100, 700);
+        setSize(1400, 950);
+
         setLocationRelativeTo(null);
         
         // Panel principal
