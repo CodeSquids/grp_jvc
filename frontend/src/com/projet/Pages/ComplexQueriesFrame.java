@@ -56,7 +56,8 @@ public class ComplexQueriesFrame extends JFrame {
     private static final Color COLOR_SUCCESS = new Color(39, 174, 96);
     private static final Color COLOR_WARNING = new Color(243, 156, 18);
     private static final Color COLOR_INFO = new Color(52, 152, 219);
-    
+    private static final Color COLOR_HEADER_BG = new Color(45, 40, 55);       // Gris profond élégant
+
     // Liste des sites (sera chargée dynamiquement)
     private String[] sites = {"Tous les sites"};
     
@@ -635,14 +636,15 @@ private void appliquerFiltres1() {
     private JPanel createStatusPanel() {
         JPanel statusPanel = new JPanel(new BorderLayout());
         statusPanel.setBorder(BorderFactory.createEmptyBorder(5, 15, 10, 15));
-        statusPanel.setBackground(new Color(240, 240, 240));
+        statusPanel.setBackground(COLOR_HEADER_BG);
         
         progressBar = new JProgressBar();
         progressBar.setVisible(false);
         
         lblStatus = new JLabel("✅ Chargement des données en cours...");
-        lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        
+        lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblStatus.setForeground(Color.WHITE);
+
         statusPanel.add(progressBar, BorderLayout.NORTH);
         statusPanel.add(lblStatus, BorderLayout.WEST);
         

@@ -33,26 +33,21 @@ public class Header extends JPanel {
         setBackground(COLOR_HEADER_BG);
         setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
 
-        JLabel logoLabel = new JLabel("*");
-        logoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 40));
-        logoLabel.setForeground(new Color(200, 180, 150));
-        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel titleLabel = new JLabel(title);
+        JLabel titleLabel = new JLabel("*");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
 
-        JLabel subtitleLabel = new JLabel(subtitle);
+        JLabel subtitleLabel = new JLabel(title);
         subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        subtitleLabel.setForeground(new Color(200, 195, 190));
+        subtitleLabel.setForeground(Color.WHITE);
 
-        JPanel textPanel = new JPanel(new GridLayout(2, 1));
-        textPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel textPanel = new JPanel(new BorderLayout());
+        textPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
         textPanel.setOpaque(false);
-        textPanel.add(titleLabel);
-        textPanel.add(subtitleLabel);
+        textPanel.add(titleLabel, BorderLayout.WEST);
+        textPanel.add(subtitleLabel, BorderLayout.EAST);
 
-        JPanel navPanel = new JPanel(new GridLayout(4, 1, 8, 0));
+        JPanel navPanel = new JPanel(new GridLayout(4, 1, 8, 10));
         navPanel.setOpaque(false);
         navPanel.add(createNavButton("Visiteurs", ActivePage.VISITORS));
         navPanel.add(createNavButton("Sites", ActivePage.SITES));
@@ -60,11 +55,10 @@ public class Header extends JPanel {
         navPanel.add(createNavButton("Complexes", ActivePage.COMPLEX));
         navPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        add(logoLabel);
-        add(Box.createVerticalStrut(10));
         add(textPanel);
         add(Box.createVerticalStrut(20));
         add(navPanel);
+        add(Box.createVerticalStrut(200));
     }
 
     private JButton createNavButton(String text, ActivePage targetPage) {
@@ -76,7 +70,8 @@ public class Header extends JPanel {
 
     private JButton createElegantButton(String text, Color backgroundColor) {
         JButton button = new JButton(text);
-        button.setMaximumSize(new Dimension(180, 40));
+//        button.setMaximumSize(new Dimension(180, 40));
+        button.setSize(new Dimension(80, 40));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setFont(new Font("Segoe UI", Font.BOLD, 13));
         button.setForeground(Color.BLACK);
@@ -85,7 +80,7 @@ public class Header extends JPanel {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(COLOR_BORDER, 1),
-                BorderFactory.createEmptyBorder(9, 21, 9, 21)
+                BorderFactory.createEmptyBorder(9, 10, 9, 10)
         ));
 
         button.addMouseListener(new java.awt.event.MouseAdapter() {

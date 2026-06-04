@@ -247,7 +247,7 @@ public class Main extends JFrame {
     
     private JPanel createStatusPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(new Color(240, 240, 240));
+        panel.setBackground(COLOR_HEADER_BG);
         panel.setBorder(BorderFactory.createEmptyBorder(5, 15, 10, 15));
         
         lblStatus = new JLabel("✅ Système prêt");
