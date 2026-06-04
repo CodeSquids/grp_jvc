@@ -48,10 +48,10 @@ public class Header extends JPanel {
 
         JPanel navPanel = new JPanel(new GridLayout(1, 4, 8, 0));
         navPanel.setOpaque(false);
-        navPanel.add(createNavigationButton("CRUD VISITOR", ActivePage.VISITORS));
-        navPanel.add(createNavigationButton("CRUD SITE", ActivePage.SITES));
-        navPanel.add(createNavigationButton("CRUD VISITES", ActivePage.VISITS));
-        navPanel.add(createNavigationButton("COMPLEXES", ActivePage.COMPLEX));
+        navPanel.add(createNavigationButton("Visiteurs", ActivePage.VISITORS));
+        navPanel.add(createNavigationButton("Sites", ActivePage.SITES));
+        navPanel.add(createNavigationButton("Visite ", ActivePage.VISITS));
+        navPanel.add(createNavigationButton("Complexes", ActivePage.COMPLEX));
 
         add(logoLabel, BorderLayout.WEST);
         add(textPanel, BorderLayout.CENTER);

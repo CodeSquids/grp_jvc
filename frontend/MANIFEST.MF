@@ -1,0 +1,2 @@
+Main-Class: com.projet.Main
+Class-Path: lib/json-20251224.jar
