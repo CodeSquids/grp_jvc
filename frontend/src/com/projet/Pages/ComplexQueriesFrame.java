@@ -61,52 +61,47 @@ public class ComplexQueriesFrame extends JFrame {
     private String[] sites = {"Tous les sites"};
     
     public ComplexQueriesFrame() {
-        setTitle("📊 Gestion des Visites - Requêtes Complexes");
+        setTitle("HereVisit : Gestion des Visites");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout());
+        setSize(1400, 950);
 
-        // Panel principal
-        mainPanel = new JPanel(new GridLayout(2, 1, 10, 10));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.setBackground(Color.WHITE);
-        
-        // Initialiser les modèles
-        complex1Model = new Complex1Model();
-        complex2Model = new Complex2Model();
-        
-        // Charger la liste des sites depuis l'API
-        chargerListeSites();
-        
-        // Créer les panels
-        createComplex1Panel();
-        createComplex2Panel();
-        
-        mainPanel.add(complex1Panel);
-        mainPanel.add(complex2Panel);
-        
-        // Panel de statut
-        JPanel statusPanel = createStatusPanel();
-        
-        add(new Header(
+
+        JPanel headerPanel = new Header(
                 this,
                 "REQUETES COMPLEXES",
                 "Statistiques et recherches avancees",
                 Header.ActivePage.COMPLEX
-        ), BorderLayout.NORTH);
-        add(mainPanel, BorderLayout.CENTER);
-        add(statusPanel, BorderLayout.SOUTH);
-        
-        setSize(1400, 950);
+        );
+        headerPanel.setPreferredSize(new Dimension(200, getHeight()));
+        mainPanel.add(headerPanel, BorderLayout.WEST);
+
+        JPanel centerPanel = new JPanel(new GridLayout(2, 1, 0, 10));
+        centerPanel.setOpaque(false);
+        centerPanel.setPreferredSize(new Dimension(1000, 0));
+
+        complex1Model = new Complex1Model();
+        complex2Model = new Complex2Model();
+        chargerListeSites();
+        createComplex1Panel();
+        createComplex2Panel();
+
+        centerPanel.add(complex1Panel, BorderLayout.NORTH);
+        centerPanel.add(complex2Panel, BorderLayout.SOUTH);
+        mainPanel.add(centerPanel, BorderLayout.CENTER);
+
+        JPanel statusPanel = createStatusPanel();
+        mainPanel.add(statusPanel, BorderLayout.SOUTH);
+        add(mainPanel);
         setLocationRelativeTo(null);
         setVisible(true);
-        
-        // Charger TOUTES les données par défaut
         chargerToutesDonnees();
     }
     
     private void chargerListeSites() {
         try {
-            // Utiliser complex4 qui retourne les stats globales avec les noms des sites
             JSONArray stats = VisiterService.complex4();
             if (stats != null && stats.length() > 0) {
                 java.util.List<String> siteList = new java.util.ArrayList<>();
@@ -186,9 +181,6 @@ public class ComplexQueriesFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(complex1Table);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
         
-        
-        //
-     // Après le scrollPane, avant complex1Panel.add
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottomPanel.setBackground(Color.WHITE);
         lblTotal1 = new JLabel("Total: 0,00 Ar");
@@ -197,10 +189,8 @@ public class ComplexQueriesFrame extends JFrame {
         bottomPanel.add(lblTotal1);
 
         complex1Panel.add(bottomPanel, BorderLayout.SOUTH);
-  //
         complex1Panel.add(filterPanel, BorderLayout.NORTH);
         complex1Panel.add(scrollPane, BorderLayout.CENTER);
-        
         updateDynamicFields1();
     }
     
@@ -339,37 +329,6 @@ public class ComplexQueriesFrame extends JFrame {
         chargerToutesStats();
     }
     
-//    private void chargerToutesVisites() {
-//        setLoading(true);
-//        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-//            @Override
-//            protected Void doInBackground() throws Exception {
-//                try {
-//                    // Utiliser une grande plage de dates pour avoir toutes les données
-//                    Date startDate = Date.valueOf("2000-01-01");
-//                    Date endDate = Date.valueOf(LocalDate.now().plusYears(10).toString());
-//                    String siteNom = "Tous les sites";
-//                    
-//                    JSONArray result = VisiterService.complex1(siteNom, startDate, endDate);
-//                    complex1Model.setComplex1(result);
-//                    
-//                    int count = result.length();
-//                    if (count == 0) {
-//                        lblStatus.setText("ℹ️ Aucune visite trouvée dans la base de données");
-//                    } else {
-//                        lblStatus.setText("✅ Toutes les visites chargées - " + count + " visiteur(s) trouvé(s)");
-//                    }
-//                } catch (Exception e) {
-//                    lblStatus.setText("❌ Erreur: " + e.getMessage());
-//                    complex1Model.setComplex1(new JSONArray());
-//                }
-//                return null;
-//            }
-//            @Override
-//            protected void done() { setLoading(false); }
-//        };
-//        worker.execute();
-//    }
     private void chargerToutesVisites() {
         setLoading(true);
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
@@ -437,41 +396,7 @@ public class ComplexQueriesFrame extends JFrame {
         worker.execute();
     }
     
-//    private void appliquerFiltres1() {
-//        String siteNom = (String) cmbFiltreSite1.getSelectedItem();
-//        String periode = (String) cmbPeriode1.getSelectedItem();
-//        
-//        if (!validerPeriodes1(periode)) return;
-//        
-//        setLoading(true);
-//        
-//        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-//            @Override
-//            protected Void doInBackground() throws Exception {
-//                try {
-//                    Date startDate = getStartDate1(periode);
-//                    Date endDate = getEndDate1(periode);
-//                    
-//                    JSONArray result = VisiterService.complex1(siteNom, startDate, endDate);
-//                    complex1Model.setComplex1(result);
-//                    
-//                    int count = result.length();
-//                    if (count == 0) {
-//                        lblStatus.setText("⚠️ Aucun résultat pour les filtres sélectionnés");
-//                    } else {
-//                        lblStatus.setText("✅ Filtres appliqués - " + count + " visiteur(s) trouvé(s)");
-//                    }
-//                } catch (Exception e) {
-//                    lblStatus.setText("❌ Erreur: " + e.getMessage());
-//                }
-//                return null;
-//            }
-//            @Override
-//            protected void done() { setLoading(false); }
-//        };
-//        worker.execute();
-//    }
-    private void appliquerFiltres1() {
+private void appliquerFiltres1() {
         String siteNom = (String) cmbFiltreSite1.getSelectedItem();
         String periode = (String) cmbPeriode1.getSelectedItem();
         
@@ -532,15 +457,8 @@ public class ComplexQueriesFrame extends JFrame {
                     } else {
                         Date startDate = getStartDate2(periode);
                         Date endDate = getEndDate2(periode);
-                        
-//                        if (siteNom != null && !siteNom.equals("Tous les sites")) {
-//                            // Pour un site spécifique, on utilise complex1 avec agrégation
-//                            JSONArray visites = VisiterService.complex1(siteNom, startDate, endDate);
-//                            // Transformer en format statistique
-//                            result = agregerStatsParSite(visites, siteNom);
-//                        } else {
+
                             result = VisiterService.complex2(startDate, endDate);
-//                        }
                     }
                     
                     complex2Model.setComplex2(result);

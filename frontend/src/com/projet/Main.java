@@ -41,32 +41,28 @@ public class Main extends JFrame {
     private static final Color COLOR_ROW_EVEN = new Color(248, 245, 242);     // Lignes paires
     
     public Main() {
-        setTitle("Gestion des Visiteurs - Système de Gestion des Sites Touristiques");
+        setTitle("HereVisit : Gestion des Visites");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        setSize(1100, 700);
         setSize(1400, 950);
-
         setLocationRelativeTo(null);
-        
-        // Panel principal
+
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.setBackground(COLOR_BACKGROUND);
         
-        // Header
         JPanel headerPanel = new Header(
             this,
             "GESTION DES VISITEURS",
-            "Système de gestion des sites touristiques",
+            "Gestion des sites touristiques",
             Header.ActivePage.VISITORS
         );
-        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        headerPanel.setPreferredSize(new Dimension(200, getHeight()));
+        mainPanel.add(headerPanel, BorderLayout.WEST);
         
-        // Panel central
         JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
         centerPanel.setOpaque(false);
+        centerPanel.setPreferredSize(new Dimension(1000, 0));
         
-        // Recherche
         JPanel searchPanel = createSearchPanel();
         centerPanel.add(searchPanel, BorderLayout.NORTH);
         
@@ -251,8 +247,8 @@ public class Main extends JFrame {
     
     private JPanel createStatusPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(COLOR_HEADER_BG);
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        panel.setBackground(new Color(240, 240, 240));
+        panel.setBorder(BorderFactory.createEmptyBorder(5, 15, 10, 15));
         
         lblStatus = new JLabel("✅ Système prêt");
         lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 12));

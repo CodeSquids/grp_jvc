@@ -38,32 +38,32 @@ public class SitePage extends JFrame {
     private static final Color COLOR_ROW_EVEN = new Color(248, 245, 242);
 
     public SitePage() {
-        setTitle("Gestion des Sites - Système de Gestion des Sites Touristiques");
+        setTitle("HereVisit : Gestion des Visites");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        setSize(1100, 700);
         setSize(1400, 950);
-
         setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.setBackground(COLOR_BACKGROUND);
 
-        mainPanel.add(new Header(
+        JPanel headerPanel = new Header(
                 this,
                 "GESTION DES SITES",
-                "Système de gestion des sites touristiques",
+                "Gestion des sites touristiques",
                 Header.ActivePage.SITES
-        ), BorderLayout.NORTH);
+        );
+        headerPanel.setPreferredSize(new Dimension(200, getHeight()));
+        mainPanel.add(headerPanel, BorderLayout.WEST);
 
         JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
         centerPanel.setOpaque(false);
+        centerPanel.setPreferredSize(new Dimension(1000, 0));
         centerPanel.add(createSearchPanel(), BorderLayout.NORTH);
         centerPanel.add(createTableContainer(), BorderLayout.CENTER);
+
         mainPanel.add(centerPanel, BorderLayout.CENTER);
-
         mainPanel.add(createStatusPanel(), BorderLayout.SOUTH);
-
         add(mainPanel);
 
         setupKeyboardShortcuts();
