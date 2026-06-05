@@ -155,7 +155,7 @@ public class Header extends JPanel {
             case VISITORS -> new Main();
             case SITES -> new SitePage();
             case VISITS -> new VisiterPage();
-            case COMPLEX1 -> new ComplexQueriesFrame();
+            case COMPLEX1 -> new Complex1();
             case COMPLEX2 -> new Complex2();
         };
 

@@ -9,7 +9,7 @@ import com.projet.Pages.SitePage;
 import com.projet.Pages.VisiterPage;
 import com.projet.Pages.Header;
 //
-import com.projet.Pages.ComplexQueriesFrame;
+import com.projet.Pages.Complex1;
 
 //
 import org.json.JSONArray;
@@ -452,7 +452,7 @@ public class Main extends JFrame {
     
     //
     private void openCompPage() {
-        ComplexQueriesFrame compPage = new ComplexQueriesFrame();
+        Complex1 compPage = new Complex1();
         compPage.setVisible(true);
         dispose();
     }
