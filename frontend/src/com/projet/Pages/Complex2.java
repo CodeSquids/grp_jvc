@@ -5,7 +5,8 @@ import com.projet.Tables.Complex2Model;
 import org.json.JSONArray;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -30,27 +31,36 @@ public class Complex2 extends JFrame {
 
     private JProgressBar progressBar;
     private JLabel lblStatus;
+    private JLabel lblRecordCount;
 
-    private static final Color COLOR_INFO = new Color(52, 152, 219);
-    private static final Color COLOR_SUCCESS = new Color(39, 174, 96);
-    private static final Color COLOR_WARNING = new Color(243, 156, 18);
+    private static final Color COLOR_BACKGROUND = new Color(250, 248, 245);
+    private static final Color COLOR_PANEL = new Color(255, 255, 255);
+    private static final Color COLOR_BORDER = new Color(210, 200, 190);
     private static final Color COLOR_HEADER_BG = new Color(45, 40, 55);
+    private static final Color COLOR_ACCENT = new Color(160, 130, 110);
+    private static final Color COLOR_BUTTON_APPLY = new Color(200, 230, 210);
+    private static final Color COLOR_BUTTON_REFRESH = new Color(200, 210, 220);
+    private static final Color COLOR_TABLE_HEADER = new Color(55, 50, 65);
+    private static final Color COLOR_ROW_ODD = new Color(255, 255, 255);
+    private static final Color COLOR_ROW_EVEN = new Color(248, 245, 242);
 
     public Complex2() {
         setTitle("HereVisit : Gestion des Visites");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1400, 950);
+        setLocationRelativeTo(null);
 
         mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBackground(COLOR_BACKGROUND);
 
         JPanel headerPanel = new Header(this, Header.ActivePage.COMPLEX2);
         headerPanel.setPreferredSize(new Dimension(200, getHeight()));
         mainPanel.add(headerPanel, BorderLayout.WEST);
 
-        JPanel centerPanel = new JPanel(new BorderLayout(0, 10));
+        JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
         centerPanel.setOpaque(false);
+        centerPanel.setPreferredSize(new Dimension(1000, 0));
 
         complex2Model = new Complex2Model();
         createComplex2Panel();
@@ -60,70 +70,153 @@ public class Complex2 extends JFrame {
         mainPanel.add(createStatusPanel(), BorderLayout.SOUTH);
 
         add(mainPanel);
-        setLocationRelativeTo(null);
         setVisible(true);
         chargerToutesStats();
     }
 
     private void createComplex2Panel() {
         complex2Panel = new JPanel(new BorderLayout(10, 10));
-        complex2Panel.setBorder(createTitledBorder("REQUETE 2 : Effectif et montant total par site", COLOR_INFO));
-        complex2Panel.setBackground(Color.WHITE);
+        complex2Panel.setOpaque(false);
+        complex2Panel.add(createFilterPanel(), BorderLayout.NORTH);
+        complex2Panel.add(createTableContainer(), BorderLayout.CENTER);
+        updateDynamicFields2();
+    }
 
-        JPanel filterPanel = new JPanel(new BorderLayout(10, 10));
-        filterPanel.setBackground(Color.WHITE);
-        filterPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    private JPanel createFilterPanel() {
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBackground(COLOR_PANEL);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(COLOR_BORDER, 1),
+                BorderFactory.createEmptyBorder(15, 20, 15, 20)
+        ));
 
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
-        topPanel.setBackground(Color.WHITE);
+        JLabel titleLabel = new JLabel("Filtres de la requete 2");
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        titleLabel.setForeground(COLOR_ACCENT);
 
-        topPanel.add(createLabel("Periode :"));
-        cmbPeriode2 = new JComboBox<>(new String[]{"Toute l'annee en cours", "Annee specifique", "Mois specifique", "Entre 2 dates"});
+        JPanel contentPanel = new JPanel(new BorderLayout(10, 10));
+        contentPanel.setOpaque(false);
+
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
+        topPanel.setOpaque(false);
+
+        JLabel periodeLabel = new JLabel("Periode :");
+        periodeLabel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        periodeLabel.setForeground(Color.BLACK);
+
+        cmbPeriode2 = new JComboBox<>(new String[]{
+                "Toute l'annee en cours",
+                "Annee specifique",
+                "Mois specifique",
+                "Entre 2 dates"
+        });
         cmbPeriode2.setPreferredSize(new Dimension(180, 30));
         cmbPeriode2.addActionListener(e -> updateDynamicFields2());
+
+        topPanel.add(periodeLabel);
         topPanel.add(cmbPeriode2);
 
-        dynamicPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
-        dynamicPanel2.setBackground(Color.WHITE);
+        dynamicPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
+        dynamicPanel2.setOpaque(false);
 
         txtAnnee2 = new JTextField(10);
         txtMois2 = new JTextField(10);
         txtDateStart2 = new JTextField(10);
         txtDateEnd2 = new JTextField(10);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
-        buttonPanel.setBackground(Color.WHITE);
+        contentPanel.add(topPanel, BorderLayout.WEST);
+        contentPanel.add(dynamicPanel2, BorderLayout.EAST);
 
-        btnAppliquerFiltres2 = createStyledButton("Appliquer les filtres", COLOR_SUCCESS);
-        btnAppliquerFiltres2.addActionListener(e -> appliquerFiltres2());
+        panel.add(titleLabel, BorderLayout.NORTH);
+        panel.add(contentPanel, BorderLayout.CENTER);
 
-        btnReinitialiser2 = createStyledButton("Reinitialiser (Toutes les donnees)", COLOR_WARNING);
-        btnReinitialiser2.addActionListener(e -> chargerToutesStats());
+        return panel;
+    }
 
-        buttonPanel.add(btnAppliquerFiltres2);
-        buttonPanel.add(btnReinitialiser2);
+    private JPanel createTableContainer() {
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBackground(COLOR_PANEL);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(COLOR_BORDER, 1),
+                BorderFactory.createEmptyBorder(15, 20, 15, 20)
+        ));
 
-        filterPanel.add(topPanel, BorderLayout.NORTH);
-        filterPanel.add(dynamicPanel2, BorderLayout.CENTER);
-        filterPanel.add(buttonPanel, BorderLayout.SOUTH);
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        titlePanel.setOpaque(false);
+
+        JLabel titleLabel = new JLabel("Resultats de la requete :  Nombres de visiteurs et montant total des visites par site dans une annee ou dans un mois ou entre deux dates");
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        titleLabel.setForeground(COLOR_ACCENT);
+
+        lblRecordCount = new JLabel("0 enregistrement(s)");
+        lblRecordCount.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblRecordCount.setForeground(Color.DARK_GRAY);
+
+        titlePanel.add(titleLabel, BorderLayout.WEST);
+        titlePanel.add(lblRecordCount, BorderLayout.EAST);
 
         complex2Table = new JTable(complex2Model);
-        complex2Table.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        complex2Table.setRowHeight(25);
-        complex2Table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        complex2Table.getTableHeader().setBackground(COLOR_INFO);
-        complex2Table.getTableHeader().setForeground(Color.BLACK);
+        complex2Table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        complex2Table.setRowHeight(32);
+        complex2Table.setIntercellSpacing(new Dimension(10, 5));
+        complex2Table.setShowGrid(false);
+        complex2Table.setBackground(COLOR_PANEL);
+        complex2Table.setForeground(Color.BLACK);
+        complex2Table.setSelectionBackground(new Color(160, 130, 110, 40));
+        complex2Table.setSelectionForeground(Color.BLACK);
+
+        JTableHeader header = complex2Table.getTableHeader();
+        header.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        header.setBackground(COLOR_TABLE_HEADER);
+        header.setForeground(Color.BLACK);
+        header.setPreferredSize(new Dimension(header.getWidth(), 38));
+
+        complex2Table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? COLOR_ROW_ODD : COLOR_ROW_EVEN);
+                    c.setForeground(Color.BLACK);
+                }
+                setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 12));
+                return c;
+            }
+        });
 
         JScrollPane scrollPane = new JScrollPane(complex2Table);
-        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+        scrollPane.setBorder(BorderFactory.createLineBorder(COLOR_BORDER, 1));
+        scrollPane.getViewport().setBackground(COLOR_PANEL);
 
-        complex2Panel.add(filterPanel, BorderLayout.NORTH);
-        complex2Panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(titlePanel, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(createActionButtonPanel(), BorderLayout.SOUTH);
 
-        updateDynamicFields2();
+        return panel;
+    }
+
+    private JPanel createActionButtonPanel() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 15));
+        panel.setOpaque(false);
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+
+        btnAppliquerFiltres2 = createElegantButton("APPLIQUER LES FILTRES", COLOR_BUTTON_APPLY);
+        btnAppliquerFiltres2.addActionListener(e -> appliquerFiltres2());
+
+        btnReinitialiser2 = createElegantButton("REINITIALISER", COLOR_BUTTON_REFRESH);
+        btnReinitialiser2.addActionListener(e -> chargerToutesStats());
+
+        panel.add(btnAppliquerFiltres2);
+        panel.add(btnReinitialiser2);
+        return panel;
     }
 
     private void updateDynamicFields2() {
+        if (dynamicPanel2 == null || cmbPeriode2 == null) {
+            return;
+        }
+
         dynamicPanel2.removeAll();
         String periode = (String) cmbPeriode2.getSelectedItem();
 
@@ -158,29 +251,28 @@ public class Complex2 extends JFrame {
 
     private void chargerToutesStats() {
         setLoading(true);
-        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+        SwingWorker<JSONArray, Void> worker = new SwingWorker<>() {
             @Override
-            protected Void doInBackground() {
-                try {
-                    JSONArray result = VisiterService.complex4();
-                    complex2Model.setComplex2(result);
-
-                    int count = result.length();
-                    if (count == 0) {
-                        lblStatus.setText("Aucune statistique disponible");
-                    } else {
-                        lblStatus.setText("Toutes les statistiques chargees - " + count + " site(s) trouve(s)");
-                    }
-                } catch (Exception e) {
-                    lblStatus.setText("Erreur: " + e.getMessage());
-                    complex2Model.setComplex2(new JSONArray());
-                }
-                return null;
+            protected JSONArray doInBackground() throws Exception {
+                return VisiterService.complex4();
             }
 
             @Override
             protected void done() {
-                setLoading(false);
+                try {
+                    JSONArray result = get();
+                    complex2Model.setComplex2(result);
+                    lblRecordCount.setText(result.length() + " enregistrement(s)");
+                    lblStatus.setText(result.length() == 0
+                            ? "Aucune statistique disponible"
+                            : "Toutes les statistiques chargees - " + result.length() + " site(s) trouve(s)");
+                } catch (Exception e) {
+                    lblStatus.setText("Erreur: " + e.getMessage());
+                    complex2Model.setComplex2(new JSONArray());
+                    lblRecordCount.setText("0 enregistrement(s)");
+                } finally {
+                    setLoading(false);
+                }
             }
         };
         worker.execute();
@@ -194,38 +286,32 @@ public class Complex2 extends JFrame {
         }
 
         setLoading(true);
-
-        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+        SwingWorker<JSONArray, Void> worker = new SwingWorker<>() {
             @Override
-            protected Void doInBackground() {
-                try {
-                    JSONArray result;
-
-                    if ("Toute l'annee en cours".equals(periode)) {
-                        result = VisiterService.complex4();
-                    } else {
-                        Date startDate = getStartDate2(periode);
-                        Date endDate = getEndDate2(periode);
-                        result = VisiterService.complex2(startDate, endDate);
-                    }
-
-                    complex2Model.setComplex2(result);
-
-                    int count = result.length();
-                    if (count == 0) {
-                        lblStatus.setText("Aucune statistique pour les filtres selectionnes");
-                    } else {
-                        lblStatus.setText("Statistiques filtrees - " + count + " site(s) trouve(s)");
-                    }
-                } catch (Exception e) {
-                    lblStatus.setText("Erreur: " + e.getMessage());
+            protected JSONArray doInBackground() throws Exception {
+                if ("Toute l'annee en cours".equals(periode)) {
+                    return VisiterService.complex4();
                 }
-                return null;
+
+                Date startDate = getStartDate2(periode);
+                Date endDate = getEndDate2(periode);
+                return VisiterService.complex2(startDate, endDate);
             }
 
             @Override
             protected void done() {
-                setLoading(false);
+                try {
+                    JSONArray result = get();
+                    complex2Model.setComplex2(result);
+                    lblRecordCount.setText(result.length() + " enregistrement(s)");
+                    lblStatus.setText(result.length() == 0
+                            ? "Aucune statistique pour les filtres selectionnes"
+                            : "Statistiques filtrees - " + result.length() + " site(s) trouve(s)");
+                } catch (Exception e) {
+                    lblStatus.setText("Erreur: " + e.getMessage());
+                } finally {
+                    setLoading(false);
+                }
             }
         };
         worker.execute();
@@ -259,8 +345,8 @@ public class Complex2 extends JFrame {
         } else if ("Annee specifique".equals(periode)) {
             return Date.valueOf(txtAnnee2.getText().trim() + "-01-01");
         } else if ("Mois specifique".equals(periode)) {
-            return Date.valueOf(txtAnnee2.getText().trim() + "-" +
-                    String.format("%02d", Integer.parseInt(txtMois2.getText().trim())) + "-01");
+            return Date.valueOf(txtAnnee2.getText().trim() + "-"
+                    + String.format("%02d", Integer.parseInt(txtMois2.getText().trim())) + "-01");
         }
         return Date.valueOf(txtDateStart2.getText().trim());
     }
@@ -276,8 +362,8 @@ public class Complex2 extends JFrame {
             int mois = Integer.parseInt(txtMois2.getText().trim());
             int annee = Integer.parseInt(txtAnnee2.getText().trim());
             int lastDay = getLastDayOfMonth(mois, annee);
-            return Date.valueOf(txtAnnee2.getText().trim() + "-" +
-                    String.format("%02d", mois) + "-" + lastDay);
+            return Date.valueOf(txtAnnee2.getText().trim() + "-"
+                    + String.format("%02d", mois) + "-" + lastDay);
         }
         return Date.valueOf(txtDateEnd2.getText().trim());
     }
@@ -302,18 +388,21 @@ public class Complex2 extends JFrame {
 
     private JPanel createStatusPanel() {
         JPanel statusPanel = new JPanel(new BorderLayout());
-        statusPanel.setBorder(BorderFactory.createEmptyBorder(5, 15, 10, 15));
+        statusPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         statusPanel.setBackground(COLOR_HEADER_BG);
-
-        progressBar = new JProgressBar();
-        progressBar.setVisible(false);
 
         lblStatus = new JLabel("Chargement des donnees en cours...");
         lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         lblStatus.setForeground(Color.WHITE);
 
-        statusPanel.add(progressBar, BorderLayout.NORTH);
+        progressBar = new JProgressBar();
+        progressBar.setVisible(false);
+        progressBar.setPreferredSize(new Dimension(150, 12));
+        progressBar.setBackground(new Color(80, 75, 85));
+        progressBar.setForeground(COLOR_ACCENT);
+
         statusPanel.add(lblStatus, BorderLayout.WEST);
+        statusPanel.add(progressBar, BorderLayout.EAST);
 
         return statusPanel;
     }
@@ -330,35 +419,34 @@ public class Complex2 extends JFrame {
                 JOptionPane.showMessageDialog(this, message, "Erreur de saisie", JOptionPane.ERROR_MESSAGE));
     }
 
-    private TitledBorder createTitledBorder(String title, Color color) {
-        TitledBorder border = BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(color, 2),
-                title,
-                TitledBorder.LEFT,
-                TitledBorder.TOP,
-                new Font("Segoe UI", Font.BOLD, 13),
-                color
-        );
-        border.setTitleColor(color);
-        return border;
-    }
-
-    private JButton createStyledButton(String text, Color backgroundColor) {
+    private JButton createElegantButton(String text, Color backgroundColor) {
         JButton button = new JButton(text);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        button.setFont(new Font("Segoe UI", Font.BOLD, 13));
         button.setForeground(Color.BLACK);
         button.setBackground(backgroundColor);
-        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(COLOR_BORDER, 1),
+                BorderFactory.createEmptyBorder(9, 21, 9, 21)
+        ));
+        button.setOpaque(true);
 
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(backgroundColor.darker());
+                button.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(COLOR_BORDER.darker(), 1),
+                        BorderFactory.createEmptyBorder(9, 21, 9, 21)
+                ));
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(backgroundColor);
+                button.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(COLOR_BORDER, 1),
+                        BorderFactory.createEmptyBorder(9, 21, 9, 21)
+                ));
             }
         });
 
