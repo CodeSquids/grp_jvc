@@ -61,7 +61,7 @@ public class VisiterCRUDDialog extends JDialog {
 
         row++;
 
-        if (mode.equals("add")) {
+        if (hasVisitorCombo()) {
             gbc.gridx = 0;
             gbc.gridy = row;
             JLabel lblNomVisiteur = new JLabel("Nom Visiteur *");
@@ -96,7 +96,7 @@ public class VisiterCRUDDialog extends JDialog {
 
         row++;
 
-        if (mode.equals("add")) {
+        if (hasSiteCombo()) {
             gbc.gridx = 0;
             gbc.gridy = row;
             JLabel lblNomSite = new JLabel("Nom Site *");
@@ -169,8 +169,11 @@ public class VisiterCRUDDialog extends JDialog {
         dateField.setValue(parseDateVisiteOrToday(dateVisite));
         formPanel.add(dateField, gbc);
 
-        if (mode.equals("add")) {
+        if (hasVisitorCombo()) {
             loadVisitorOptions();
+        }
+
+        if (hasSiteCombo()) {
             loadSiteOptions();
         }
 
@@ -197,7 +200,7 @@ public class VisiterCRUDDialog extends JDialog {
 
         add(mainPanel);
 
-        setSize(500, mode.equals("add") ? 650 : 490);
+        setSize(500, hasVisitorCombo() || hasSiteCombo() ? 650 : 490);
         setLocationRelativeTo(parent);
         setResizable(false);
     }
@@ -275,8 +278,12 @@ public class VisiterCRUDDialog extends JDialog {
             return;
         }
 
+        String selectedNumero = txtVisiteur.getText().trim();
         comboNomVisiteur.addItem(new VisitorOption("", "-- Selectionner un visiteur --"));
-        comboNomVisiteur.setSelectedIndex(0);
+        if (mode.equals("add")) {
+            comboNomVisiteur.setSelectedIndex(0);
+            txtVisiteur.setText("");
+        }
 
         SwingWorker<JSONArray, Void> worker = new SwingWorker<>() {
             @Override
@@ -301,8 +308,7 @@ public class VisiterCRUDDialog extends JDialog {
                         comboNomVisiteur.addItem(new VisitorOption(numero, nom));
                     }
 
-                    comboNomVisiteur.setSelectedIndex(0);
-                    txtVisiteur.setText("");
+                    selectVisitorOption(selectedNumero);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(VisiterCRUDDialog.this,
                             "Impossible de charger la liste des visiteurs.",
@@ -319,8 +325,12 @@ public class VisiterCRUDDialog extends JDialog {
             return;
         }
 
+        String selectedNumero = txtSite.getText().trim();
         comboNomSite.addItem(new SiteOption("", "-- Selectionner un site --"));
-        comboNomSite.setSelectedIndex(0);
+        if (mode.equals("add")) {
+            comboNomSite.setSelectedIndex(0);
+            txtSite.setText("");
+        }
 
         SwingWorker<JSONArray, Void> worker = new SwingWorker<>() {
             @Override
@@ -345,8 +355,7 @@ public class VisiterCRUDDialog extends JDialog {
                         comboNomSite.addItem(new SiteOption(numero, nom));
                     }
 
-                    comboNomSite.setSelectedIndex(0);
-                    txtSite.setText("");
+                    selectSiteOption(selectedNumero);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(VisiterCRUDDialog.this,
                             "Impossible de charger la liste des sites.",
@@ -384,6 +393,68 @@ public class VisiterCRUDDialog extends JDialog {
         }
 
         txtSite.setText(selected.numero);
+    }
+
+    private boolean hasVisitorCombo() {
+        return mode.equals("add") || mode.equals("edit");
+    }
+
+    private boolean hasSiteCombo() {
+        return mode.equals("add") || mode.equals("edit");
+    }
+
+    private void selectVisitorOption(String numero) {
+        if (comboNomVisiteur == null) {
+            return;
+        }
+
+        String target = numero == null ? "" : numero.trim();
+        if (target.isEmpty()) {
+            comboNomVisiteur.setSelectedIndex(0);
+            if (mode.equals("add")) {
+                txtVisiteur.setText("");
+            }
+            return;
+        }
+
+        for (int i = 0; i < comboNomVisiteur.getItemCount(); i++) {
+            VisitorOption option = comboNomVisiteur.getItemAt(i);
+            if (option != null && target.equals(option.numero)) {
+                comboNomVisiteur.setSelectedIndex(i);
+                txtVisiteur.setText(option.numero);
+                return;
+            }
+        }
+
+        comboNomVisiteur.setSelectedIndex(0);
+        txtVisiteur.setText(target);
+    }
+
+    private void selectSiteOption(String numero) {
+        if (comboNomSite == null) {
+            return;
+        }
+
+        String target = numero == null ? "" : numero.trim();
+        if (target.isEmpty()) {
+            comboNomSite.setSelectedIndex(0);
+            if (mode.equals("add")) {
+                txtSite.setText("");
+            }
+            return;
+        }
+
+        for (int i = 0; i < comboNomSite.getItemCount(); i++) {
+            SiteOption option = comboNomSite.getItemAt(i);
+            if (option != null && target.equals(option.numero)) {
+                comboNomSite.setSelectedIndex(i);
+                txtSite.setText(option.numero);
+                return;
+            }
+        }
+
+        comboNomSite.setSelectedIndex(0);
+        txtSite.setText(target);
     }
 
     public boolean isSaved() {
