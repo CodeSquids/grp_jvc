@@ -11,7 +11,8 @@ public class Header extends JPanel {
         VISITORS,
         SITES,
         VISITS,
-        COMPLEX
+        COMPLEX1,
+        COMPLEX2
     }
 
     private static final Color COLOR_HEADER_BG = new Color(45, 40, 55);
@@ -72,8 +73,8 @@ public class Header extends JPanel {
         complexLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         complexLabel.setForeground(Color.WHITE);
         navCompPanel.add(complexLabel);
-        navCompPanel.add(createNavButton("Complexe1", ActivePage.COMPLEX, ICON_COMPLEX_1));
-        navCompPanel.add(createNavButton("Complexe2", ActivePage.COMPLEX, ICON_COMPLEX_2));
+        navCompPanel.add(createNavButton("Complexe1", ActivePage.COMPLEX1, ICON_COMPLEX_1));
+        navCompPanel.add(createNavButton("Complexe2", ActivePage.COMPLEX2, ICON_COMPLEX_2));
         navCompPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         navCompPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, navCompPanel.getPreferredSize().height));
 
@@ -154,7 +155,8 @@ public class Header extends JPanel {
             case VISITORS -> new Main();
             case SITES -> new SitePage();
             case VISITS -> new VisiterPage();
-            case COMPLEX -> new ComplexQueriesFrame();
+            case COMPLEX1 -> new ComplexQueriesFrame();
+            case COMPLEX2 -> new Complex2();
         };
 
         nextFrame.setVisible(true);
