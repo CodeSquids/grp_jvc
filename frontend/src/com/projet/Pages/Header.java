@@ -34,7 +34,7 @@ public class Header extends JPanel {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(COLOR_HEADER_BG);
-        setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
+        setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         JLabel titleLabel = new JLabel("*");
         titleLabel.setPreferredSize(new Dimension(20, 20));
