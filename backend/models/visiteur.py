@@ -6,24 +6,27 @@ class VisiteurModel:
     
     def get_all(self):
         cursor = self.db.get_cursor()
-        cursor.execute("SELECT * FROM Visiteur ORDER BY n_visiteur")
-        result = cursor.fetchall()
-        cursor.close()
-        return result
+        try:
+            cursor.execute("SELECT * FROM Visiteur ORDER BY n_visiteur")
+            return cursor.fetchall()
+        finally:
+            cursor.close()
     
     def get_by_id(self, n_visiteur):
         cursor = self.db.get_cursor()
-        cursor.execute("SELECT * FROM Visiteur WHERE n_visiteur = %s", (n_visiteur,))
-        result = cursor.fetchone()
-        cursor.close()
-        return result
+        try:
+            cursor.execute("SELECT * FROM Visiteur WHERE n_visiteur = %s", (n_visiteur,))
+            return cursor.fetchone()
+        finally:
+            cursor.close()
     
     def get_by_nom(self, nom):
         cursor = self.db.get_cursor()
-        cursor.execute("SELECT * FROM Visiteur WHERE nom LIKE %s", (f'%{nom}%',))
-        result = cursor.fetchall()
-        cursor.close()
-        return result
+        try:
+            cursor.execute("SELECT * FROM Visiteur WHERE nom LIKE %s", (f'%{nom}%',))
+            return cursor.fetchall()
+        finally:
+            cursor.close()
     
     def create(self, n_visiteur, nom, adresse):
         cursor = self.db.get_cursor()
@@ -73,11 +76,12 @@ class VisiteurModel:
     def search(self, critere, valeur):
         """Recherche par numéro ou nom"""
         cursor = self.db.get_cursor()
-        if critere == 'numero':
-            cursor.execute("SELECT * FROM Visiteur WHERE n_visiteur = %s", (valeur,))
-            result = cursor.fetchall()
-        else:  # nom
-            cursor.execute("SELECT * FROM Visiteur WHERE nom LIKE %s", (f'%{valeur}%',))
-            result = cursor.fetchall()
-        cursor.close()
-        return result
+        try:
+            if critere == 'numero':
+                cursor.execute("SELECT * FROM Visiteur WHERE n_visiteur = %s", (valeur,))
+                return cursor.fetchall()
+            else:  # nom
+                cursor.execute("SELECT * FROM Visiteur WHERE nom LIKE %s", (f'%{valeur}%',))
+                return cursor.fetchall()
+        finally:
+            cursor.close()

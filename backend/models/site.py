@@ -6,10 +6,11 @@ class SiteModel:
     
     def get_all(self):
         cursor = self.db.get_cursor()
-        cursor.execute("SELECT * FROM Site ORDER BY n_site")
-        result = cursor.fetchall()
-        cursor.close()
-        return result
+        try:
+            cursor.execute("SELECT * FROM Site ORDER BY n_site")
+            return cursor.fetchall()
+        finally:
+            cursor.close()
     
     def create(self, n_site, nom, lieu, tarif_journalier):
         cursor = self.db.get_cursor()
@@ -58,9 +59,10 @@ class SiteModel:
     
     def get_by_id(self, n_site):
         cursor = self.db.get_cursor()
-        cursor.execute("SELECT * FROM Site WHERE n_site = %s", (n_site,))
-        result = cursor.fetchone()
-        cursor.close()
-        return result
+        try:
+            cursor.execute("SELECT * FROM Site WHERE n_site = %s", (n_site,))
+            return cursor.fetchone()
+        finally:
+            cursor.close()
 
 

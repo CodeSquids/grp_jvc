@@ -1,6 +1,27 @@
 import mysql.connector
 from mysql.connector import Error
 import time
+import threading
+
+
+class _LockedCursor:
+    def __init__(self, cursor, lock):
+        self._cursor = cursor
+        self._lock = lock
+        self._closed = False
+
+    def __getattr__(self, item):
+        return getattr(self._cursor, item)
+
+    def close(self):
+        if self._closed:
+            return
+
+        try:
+            self._cursor.close()
+        finally:
+            self._closed = True
+            self._lock.release()
 
 class Database:
     _instance = None
@@ -9,6 +30,7 @@ class Database:
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance.connection = None
+            cls._instance._lock = threading.Lock()
             cls._instance.connect()
         return cls._instance
     
@@ -37,21 +59,25 @@ class Database:
         """Retourne un curseur en vérifiant la connexion de manière robuste"""
         max_retries = 3
         for attempt in range(max_retries):
+            self._lock.acquire()
             try:
                 # Test simple de la connexion sans utiliser is_connected()
                 if self.connection is None:
                     self.connect()
-                
-                # Tester la connexion avec une requête simple
+                if self.connection is None:
+                    raise Exception("MySQL Connection not available")
+
+                # Retourner un curseur dédié et garder le verrou jusqu'au close()
                 cursor = self.connection.cursor(dictionary=True)
-                cursor.execute("SELECT 1")
-                cursor.fetchone()
-                
-                # Retourner un nouveau curseur
-                return self.connection.cursor(dictionary=True)
-                
+                return _LockedCursor(cursor, self._lock)
             except (Error, AttributeError, IndexError, TypeError) as e:
                 print(f"Erreur de connexion (tentative {attempt+1}/{max_retries}): {e}")
+                self._lock.release()
+                self.connect()
+                time.sleep(0.5)
+            except Exception as e:
+                print(f"Erreur de connexion (tentative {attempt+1}/{max_retries}): {e}")
+                self._lock.release()
                 self.connect()
                 time.sleep(0.5)
         
