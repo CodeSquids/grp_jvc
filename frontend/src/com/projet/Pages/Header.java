@@ -106,12 +106,11 @@ public class Header extends JPanel {
         if (iconUrl != null) {
             return scaleIcon(new ImageIcon(iconUrl));
         }
-
         return null;
     }
 
     private ImageIcon scaleIcon(ImageIcon icon) {
-        Image scaledImage = icon.getImage().getScaledInstance(36, 36, Image.SCALE_SMOOTH);
+        Image scaledImage = icon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         return new ImageIcon(scaledImage);
     }
 
