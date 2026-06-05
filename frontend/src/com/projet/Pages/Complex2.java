@@ -124,8 +124,22 @@ public class Complex2 extends JFrame {
         txtDateStart2 = new JTextField(10);
         txtDateEnd2 = new JTextField(10);
 
-        contentPanel.add(topPanel, BorderLayout.WEST);
-        contentPanel.add(dynamicPanel2, BorderLayout.EAST);
+        JPanel actionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 15));
+        actionsPanel.setOpaque(false);
+        actionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+
+        btnAppliquerFiltres2 = createElegantButton("APPLIQUER LES FILTRES", COLOR_BUTTON_APPLY);
+        btnAppliquerFiltres2.addActionListener(e -> appliquerFiltres2());
+
+        btnReinitialiser2 = createElegantButton("REINITIALISER", COLOR_BUTTON_REFRESH);
+        btnReinitialiser2.addActionListener(e -> chargerToutesStats());
+
+        actionsPanel.add(btnAppliquerFiltres2);
+        actionsPanel.add(btnReinitialiser2);
+
+        contentPanel.add(topPanel, BorderLayout.NORTH);
+        contentPanel.add(dynamicPanel2, BorderLayout.CENTER);
+        contentPanel.add(actionsPanel, BorderLayout.SOUTH);
 
         panel.add(titleLabel, BorderLayout.NORTH);
         panel.add(contentPanel, BorderLayout.CENTER);
@@ -191,24 +205,7 @@ public class Complex2 extends JFrame {
 
         panel.add(titlePanel, BorderLayout.NORTH);
         panel.add(scrollPane, BorderLayout.CENTER);
-        panel.add(createActionButtonPanel(), BorderLayout.SOUTH);
 
-        return panel;
-    }
-
-    private JPanel createActionButtonPanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 15));
-        panel.setOpaque(false);
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-
-        btnAppliquerFiltres2 = createElegantButton("APPLIQUER LES FILTRES", COLOR_BUTTON_APPLY);
-        btnAppliquerFiltres2.addActionListener(e -> appliquerFiltres2());
-
-        btnReinitialiser2 = createElegantButton("REINITIALISER", COLOR_BUTTON_REFRESH);
-        btnReinitialiser2.addActionListener(e -> chargerToutesStats());
-
-        panel.add(btnAppliquerFiltres2);
-        panel.add(btnReinitialiser2);
         return panel;
     }
 
