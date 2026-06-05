@@ -1,7 +1,6 @@
 package com.projet.Pages;
 
 import com.projet.Main;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -30,66 +29,81 @@ public class Header extends JPanel {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBackground(COLOR_HEADER_BG);
-        setBorder(BorderFactory.createEmptyBorder(20, 15, 20, 15));
-
-        setBackground(COLOR_HEADER_BG);
         setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
 
         JLabel titleLabel = new JLabel("*");
         titleLabel.setPreferredSize(new Dimension(20, 20));
 
         ImageIcon headerIcon = loadHeaderIcon();
-        if (headerIcon != null) {
-            titleLabel = new JLabel("HereVisit", headerIcon, JLabel.LEFT);
-        }
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        if (headerIcon != null) { titleLabel = new JLabel("HereVisit", headerIcon, JLabel.LEFT); }
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 19));
         titleLabel.setForeground(Color.WHITE);
 
-        JPanel textPanel = new JPanel(new BorderLayout());
+        JPanel textPanel = new JPanel(new GridLayout(2, 1, 8, 10));
         textPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
         textPanel.setOpaque(false);
         textPanel.add(titleLabel, BorderLayout.NORTH);
+        textPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        textPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, textPanel.getPreferredSize().height));
 
-        JPanel navPanel = new JPanel(new GridLayout(4, 1, 8, 10));
-        navPanel.setOpaque(false);
-        navPanel.add(createNavButton("Visiteurs", ActivePage.VISITORS));
-        navPanel.add(createNavButton("Sites", ActivePage.SITES));
-        navPanel.add(createNavButton("Visites ", ActivePage.VISITS));
-        navPanel.add(createNavButton("Complexes", ActivePage.COMPLEX));
-        navPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel navMainPanel = new JPanel(new GridLayout(5, 1, 8, 10));
+        navMainPanel.setOpaque(false);
+
+        JLabel spacesLabel = new JLabel("Espaces ");
+        spacesLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        spacesLabel.setForeground(Color.WHITE);
+        navMainPanel.add(spacesLabel);
+        navMainPanel.add(createNavButton("Visiteurs", ActivePage.VISITORS));
+        navMainPanel.add(createNavButton("Sites", ActivePage.SITES));
+        navMainPanel.add(createNavButton("Visites ", ActivePage.VISITS));
+//        navMainPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        navMainPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        navMainPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, navMainPanel.getPreferredSize().height));
+
+
+        JPanel navCompPanel = new JPanel(new GridLayout(4, 1, 8, 10));
+        navCompPanel.setOpaque(false);
+        JLabel complexLabel = new JLabel("Complexites ");
+        complexLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        complexLabel.setForeground(Color.WHITE);
+        navCompPanel.add(complexLabel);
+        navCompPanel.add(createNavButton("Complexe1", ActivePage.COMPLEX));
+        navCompPanel.add(createNavButton("Complexe2", ActivePage.COMPLEX));
+        navCompPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        navCompPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, navCompPanel.getPreferredSize().height));
 
         add(textPanel);
-        add(Box.createVerticalStrut(20));
-        add(navPanel);
-        add(Box.createVerticalStrut(200));
+        add(navMainPanel);
+        add(navCompPanel);
     }
 
     private JButton createNavButton(String text, ActivePage targetPage) {
         JButton button = createElegantButton(text, targetPage == activePage ? COLOR_ACTIVE_BUTTON : COLOR_BUTTON_REFRESH);
+        button.setForeground(targetPage == activePage ? Color.BLACK : Color.WHITE );
         button.setEnabled(targetPage != activePage);
+        button.setContentAreaFilled(targetPage == activePage);
         button.addActionListener(e -> openPage(targetPage));
         return button;
     }
 
     private JButton createElegantButton(String text, Color backgroundColor) {
         JButton button = new JButton(text);
-//        button.setMaximumSize(new Dimension(180, 40));
-        button.setSize(new Dimension(80, 40));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        button.setForeground(Color.BLACK);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 14));
         button.setBackground(backgroundColor);
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(COLOR_BORDER, 1),
-                BorderFactory.createEmptyBorder(9, 10, 9, 10)
+                BorderFactory.createLineBorder(COLOR_BORDER, 2, true),
+                BorderFactory.createEmptyBorder(9, 21, 9, 21)
         ));
+        button.setOpaque(true);
+        button.setContentAreaFilled(false);
 
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 if (button.isEnabled()) {
-                    button.setBackground(backgroundColor.darker());
+                    button.setBackground(backgroundColor);
                 }
             }
 
