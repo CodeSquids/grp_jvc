@@ -49,8 +49,6 @@ public class VisiterPage extends JFrame {
 
         JPanel headerPanel = new Header(
                 this,
-                "GESTION DES VISITES",
-                "Système de gestion des visites touristiques",
                 Header.ActivePage.VISITS
         );
         headerPanel.setPreferredSize(new Dimension(200, getHeight()));

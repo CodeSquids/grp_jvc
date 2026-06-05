@@ -4,6 +4,8 @@ import com.projet.Main;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.net.URL;
 
 public class Header extends JPanel {
     public enum ActivePage {
@@ -21,7 +23,7 @@ public class Header extends JPanel {
     private final JFrame owner;
     private final ActivePage activePage;
 
-    public Header(JFrame owner, String title, String subtitle, ActivePage activePage) {
+    public Header(JFrame owner, ActivePage activePage) {
         super();
         this.owner = owner;
         this.activePage = activePage;
@@ -34,18 +36,19 @@ public class Header extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
 
         JLabel titleLabel = new JLabel("*");
+        titleLabel.setPreferredSize(new Dimension(20, 20));
+
+        ImageIcon headerIcon = loadHeaderIcon();
+        if (headerIcon != null) {
+            titleLabel = new JLabel("HereVisit", headerIcon, JLabel.LEFT);
+        }
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
-
-        JLabel subtitleLabel = new JLabel(title);
-        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        subtitleLabel.setForeground(Color.WHITE);
 
         JPanel textPanel = new JPanel(new BorderLayout());
         textPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
         textPanel.setOpaque(false);
-        textPanel.add(titleLabel, BorderLayout.WEST);
-        textPanel.add(subtitleLabel, BorderLayout.EAST);
+        textPanel.add(titleLabel, BorderLayout.NORTH);
 
         JPanel navPanel = new JPanel(new GridLayout(4, 1, 8, 10));
         navPanel.setOpaque(false);
@@ -96,6 +99,20 @@ public class Header extends JPanel {
         });
 
         return button;
+    }
+
+    private ImageIcon loadHeaderIcon() {
+        URL iconUrl = getClass().getResource("/com/projet/images/icon-192.png");
+        if (iconUrl != null) {
+            return scaleIcon(new ImageIcon(iconUrl));
+        }
+
+        return null;
+    }
+
+    private ImageIcon scaleIcon(ImageIcon icon) {
+        Image scaledImage = icon.getImage().getScaledInstance(36, 36, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
     }
 
     private void openPage(ActivePage targetPage) {

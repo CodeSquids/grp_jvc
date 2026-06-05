@@ -49,8 +49,6 @@ public class SitePage extends JFrame {
 
         JPanel headerPanel = new Header(
                 this,
-                "GESTION DES SITES",
-                "Gestion des sites touristiques",
                 Header.ActivePage.SITES
         );
         headerPanel.setPreferredSize(new Dimension(200, getHeight()));

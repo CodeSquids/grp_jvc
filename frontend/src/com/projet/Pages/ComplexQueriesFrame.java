@@ -72,8 +72,6 @@ public class ComplexQueriesFrame extends JFrame {
 
         JPanel headerPanel = new Header(
                 this,
-                "REQUETES COMPLEXES",
-                "Statistiques et recherches avancees",
                 Header.ActivePage.COMPLEX
         );
         headerPanel.setPreferredSize(new Dimension(200, getHeight()));

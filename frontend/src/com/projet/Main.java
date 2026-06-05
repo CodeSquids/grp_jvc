@@ -52,8 +52,6 @@ public class Main extends JFrame {
         
         JPanel headerPanel = new Header(
             this,
-            "GESTION DES VISITEURS",
-            "Gestion des sites touristiques",
             Header.ActivePage.VISITORS
         );
         headerPanel.setPreferredSize(new Dimension(200, getHeight()));
