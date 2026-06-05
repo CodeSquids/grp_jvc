@@ -18,6 +18,11 @@ public class Header extends JPanel {
     private static final Color COLOR_BORDER = new Color(210, 200, 190);
     private static final Color COLOR_BUTTON_REFRESH = new Color(200, 210, 220);
     private static final Color COLOR_ACTIVE_BUTTON = new Color(230, 210, 180);
+    private static final String ICON_VISITORS = "/com/projet/images/user-circle.png";
+    private static final String ICON_SITES = "/com/projet/images/location-map.png";
+    private static final String ICON_VISITS = "/com/projet/images/chat-square.png";
+    private static final String ICON_COMPLEX_1 = "/com/projet/images/stone.png";
+    private static final String ICON_COMPLEX_2 = "/com/projet/images/briefcase.png";
 
     private final JFrame owner;
     private final ActivePage activePage;
@@ -53,9 +58,9 @@ public class Header extends JPanel {
         spacesLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         spacesLabel.setForeground(Color.WHITE);
         navMainPanel.add(spacesLabel);
-        navMainPanel.add(createNavButton("Visiteurs", ActivePage.VISITORS));
-        navMainPanel.add(createNavButton("Sites", ActivePage.SITES));
-        navMainPanel.add(createNavButton("Visites ", ActivePage.VISITS));
+        navMainPanel.add(createNavButton("Visiteurs", ActivePage.VISITORS, ICON_VISITORS));
+        navMainPanel.add(createNavButton("Sites", ActivePage.SITES, ICON_SITES));
+        navMainPanel.add(createNavButton("Visites ", ActivePage.VISITS, ICON_VISITS));
 //        navMainPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         navMainPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         navMainPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, navMainPanel.getPreferredSize().height));
@@ -67,8 +72,8 @@ public class Header extends JPanel {
         complexLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         complexLabel.setForeground(Color.WHITE);
         navCompPanel.add(complexLabel);
-        navCompPanel.add(createNavButton("Complexe1", ActivePage.COMPLEX));
-        navCompPanel.add(createNavButton("Complexe2", ActivePage.COMPLEX));
+        navCompPanel.add(createNavButton("Complexe1", ActivePage.COMPLEX, ICON_COMPLEX_1));
+        navCompPanel.add(createNavButton("Complexe2", ActivePage.COMPLEX, ICON_COMPLEX_2));
         navCompPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         navCompPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, navCompPanel.getPreferredSize().height));
 
@@ -77,8 +82,8 @@ public class Header extends JPanel {
         add(navCompPanel);
     }
 
-    private JButton createNavButton(String text, ActivePage targetPage) {
-        JButton button = createElegantButton(text, targetPage == activePage ? COLOR_ACTIVE_BUTTON : COLOR_BUTTON_REFRESH);
+    private JButton createNavButton(String text, ActivePage targetPage, String iconPath) {
+        JButton button = createElegantButton(text, loadButtonIcon(iconPath), targetPage == activePage ? COLOR_ACTIVE_BUTTON : COLOR_BUTTON_REFRESH);
         button.setForeground(targetPage == activePage ? Color.BLACK : Color.WHITE );
         button.setEnabled(targetPage != activePage);
         button.setContentAreaFilled(targetPage == activePage);
@@ -86,10 +91,14 @@ public class Header extends JPanel {
         return button;
     }
 
-    private JButton createElegantButton(String text, Color backgroundColor) {
+    private JButton createElegantButton(String text, ImageIcon icon, Color backgroundColor) {
         JButton button = new JButton(text);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        button.setIcon(icon);
+        button.setHorizontalAlignment(SwingConstants.LEFT);
+        button.setHorizontalTextPosition(SwingConstants.RIGHT);
+        button.setIconTextGap(10);
         button.setBackground(backgroundColor);
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -113,6 +122,14 @@ public class Header extends JPanel {
         });
 
         return button;
+    }
+
+    private ImageIcon loadButtonIcon(String iconPath) {
+        URL iconUrl = getClass().getResource(iconPath);
+        if (iconUrl != null) {
+            return scaleIcon(new ImageIcon(iconUrl));
+        }
+        return null;
     }
 
     private ImageIcon loadHeaderIcon() {
