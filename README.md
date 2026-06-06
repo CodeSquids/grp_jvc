@@ -56,3 +56,9 @@ jpackage `
 ```
 
 At the end of these command, we have to executable application of this project
+
+
+### Warning
+In the *frontend* directory, don't forget to add in a folder named ***lib*** and inside, put in the package ***json.jar***. We used the package named *json-20251224.jar* in. 
+
+If this folder is not present, the project may not build nor run
