@@ -43,10 +43,10 @@ class Database:
                     pass
             
             self.connection = mysql.connector.connect(
-                host='localhost',
-                database='gestion_visites',
-                user='root',
-                password='',  # Mettez votre mot de passe MySQL
+                host="<<host>>", 
+                database="<<database name>>",
+                user="<<username database>>",
+                password="<<database password>>",
                 autocommit=True,
                 pool_reset_session=True
             )
