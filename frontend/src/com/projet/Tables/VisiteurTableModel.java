@@ -1,4 +1,4 @@
-package com.projet;
+package com.projet.Tables;
 
 import javax.swing.table.AbstractTableModel;
 import org.json.JSONArray;

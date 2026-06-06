@@ -1,6 +1,6 @@
 package com.projet.Dialog;
 
-import com.projet.VisiteurService;
+import com.projet.Services.VisiteurService;
 import com.projet.Services.SiteService;
 import org.json.JSONArray;
 import org.json.JSONObject;

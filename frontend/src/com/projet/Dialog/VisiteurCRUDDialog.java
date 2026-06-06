@@ -1,4 +1,4 @@
-package com.projet;
+package com.projet.Dialog;
 
 import javax.swing.*;
 import javax.swing.border.*;
